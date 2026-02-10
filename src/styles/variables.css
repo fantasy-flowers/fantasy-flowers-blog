@@ -1,0 +1,5 @@
+/* CSS变量定义 */
+:root {
+    --body-overlay-gradient: linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.8));
+    --background-image: url('/background/12.webp');
+}

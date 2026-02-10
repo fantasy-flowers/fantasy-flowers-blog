@@ -1,0 +1,401 @@
+<template>
+  <div class="markdown-content" v-html="renderedContent"></div>
+</template>
+
+<script>
+import MarkdownIt from 'markdown-it';
+import DOMPurify from 'dompurify';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css'; // 选择你喜欢的样式
+import taskLists from 'markdown-it-task-lists';
+import { processImagePaths } from '@/utils/markdownUtils';
+
+// 配置 Markdown 渲染器
+const md = new MarkdownIt({
+  html: true,        // 允许原始HTML
+  linkify: true,     // 自动转换URL
+  typographer: true, // 启用智能引号等
+  highlight: (str, lang) => {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value;
+      } catch (__) {}
+    }
+    return ''; // 使用默认代码块样式
+  }
+})
+.use(taskLists, { enabled: true }); // 启用任务列表
+
+export default {
+  name: 'MarkdownRenderer',
+  props: {
+    content: {
+      type: String,
+      required: true
+    },
+    baseUrl: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    renderedContent() {
+      if (!this.content) return '';
+      
+      // 1. 处理图片路径
+      const processedContent = processImagePaths(this.content, this.baseUrl);
+      
+      // 2. Markdown 渲染
+      let html = md.render(processedContent);
+      
+      // 3. 安全净化（关键！防止XSS攻击）
+      html = DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: [
+          'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 
+          'ul', 'ol', 'li', 'code', 'pre', 'a', 'img', 'table',
+          'thead', 'tbody', 'tr', 'th', 'td', 'strong', 'em', 'hr',
+          'br', 'div', 'span'
+        ],
+        ALLOWED_ATTR: ['href', 'src', 'alt', 'class', 'id', 'target', 'rel']
+      });
+      
+      // 4. 为标题添加ID（用于目录导航）
+      html = html.replace(/<(h[1-6])>(.+?)<\/h[1-6]>/gi, (match, tag, title) => {
+        const id = title
+          .replace(/<[^>]+>/g, '') // 移除HTML标签
+          .toLowerCase()
+          .replace(/[^\w\u4e00-\u9fa5\s-]/g, '') // 只保留字母、数字、中文、空格和连字符
+          .replace(/\s+/g, '-') // 空格替换为连字符
+          .replace(/-+/g, '-') // 多个连字符合并为一个
+          .replace(/^-|-$/g, ''); // 移除开头和结尾的连字符
+        return `<${tag} id="${id}">${title}</${tag}>`;
+      });
+      
+      // 5. 优化图片加载（懒加载）
+      html = html.replace(/<img/g, '<img loading="lazy"');
+      
+      // 6. 处理外部链接（在新窗口打开）
+      html = html.replace(/<a href="http/g, '<a target="_blank" rel="noopener noreferrer" href="http');
+      
+      return html;
+    }
+  },
+  mounted() {
+    this.addCopyButtons();
+    this.scrollToHash();
+    window.addEventListener('hashchange', this.scrollToHash);
+  },
+  beforeUnmount() {
+    window.removeEventListener('hashchange', this.scrollToHash);
+  },
+  updated() {
+    // 内容更新后重新添加复制按钮
+    this.$nextTick(() => {
+      this.addCopyButtons();
+    });
+  },
+  methods: {
+    addCopyButtons() {
+      // 移除已存在的复制按钮
+      document.querySelectorAll('.copy-button').forEach(btn => btn.remove());
+      
+      document.querySelectorAll('.markdown-content pre').forEach(preBlock => {
+        const button = document.createElement('button');
+        button.className = 'copy-button';
+        button.textContent = '复制';
+        
+        button.addEventListener('click', () => {
+          const code = preBlock.querySelector('code').innerText;
+          navigator.clipboard.writeText(code).then(() => {
+            button.textContent = '已复制';
+            setTimeout(() => button.textContent = '复制', 2000);
+          }).catch(() => {
+            // 降级方案
+            const textArea = document.createElement('textarea');
+            textArea.value = code;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            button.textContent = '已复制';
+            setTimeout(() => button.textContent = '复制', 2000);
+          });
+        });
+        
+        preBlock.style.position = 'relative';
+        preBlock.appendChild(button);
+      });
+    },
+    
+    scrollToHash() {
+      const hash = window.location.hash;
+      if (hash) {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+/* 基础样式优化 */
+.markdown-content {
+  line-height: 1.8;
+  font-size: 1.1rem;
+  color: #ffffff;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 标题样式 */
+.markdown-content :deep(h1),
+.markdown-content :deep(h2),
+.markdown-content :deep(h3),
+.markdown-content :deep(h4),
+.markdown-content :deep(h5),
+.markdown-content :deep(h6) {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #ffffff;
+}
+
+.markdown-content :deep(h1) {
+  font-size: 2.25rem;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.markdown-content :deep(h2) {
+  font-size: 1.875rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.25rem;
+}
+
+.markdown-content :deep(h3) {
+  font-size: 1.5rem;
+}
+
+.markdown-content :deep(h4) {
+  font-size: 1.25rem;
+}
+
+/* 段落样式 */
+.markdown-content :deep(p) {
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+/* 列表样式 */
+.markdown-content :deep(ul),
+.markdown-content :deep(ol) {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+  color: #ffffff;
+}
+
+.markdown-content :deep(li) {
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+/* 引用样式 */
+.markdown-content :deep(blockquote) {
+  border-left: 4px solid #3b82f6;
+  background: rgba(30, 42, 58, 0.6);
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #ffffff;
+}
+
+/* 代码块样式 */
+.markdown-content :deep(pre) {
+  background: #2d2d2d;
+  border-radius: 6px;
+  padding: 15px;
+  overflow-x: auto;
+  margin: 20px 0;
+  position: relative;
+  color: #ffffff;
+}
+
+.markdown-content :deep(code) {
+  background: rgba(30, 42, 58, 0.8);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #ffffff;
+}
+
+.markdown-content :deep(pre code) {
+  background: transparent;
+  padding: 0;
+  color: #f8f8f2;
+}
+
+/* 复制按钮样式 */
+.markdown-content :deep(.copy-button) {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  z-index: 10;
+  transition: background-color 0.2s;
+}
+
+.markdown-content :deep(.copy-button:hover) {
+  background: #555;
+}
+
+/* 响应式图片 */
+.markdown-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 表格样式 */
+.markdown-content :deep(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  display: block;
+  white-space: nowrap;
+  color: #ffffff;
+}
+
+.markdown-content :deep(th),
+.markdown-content :deep(td) {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.75rem;
+  text-align: left;
+  color: #ffffff;
+}
+
+.markdown-content :deep(th) {
+  background: rgba(30, 42, 58, 0.8);
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.markdown-content :deep(tbody tr:nth-child(even)) {
+  background: rgba(30, 42, 58, 0.4);
+}
+
+/* 链接样式 */
+.markdown-content :deep(a) {
+  color: #60a5fa;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.markdown-content :deep(a:hover) {
+  border-bottom-color: #60a5fa;
+  color: #93c5fd;
+}
+
+/* 分割线样式 */
+.markdown-content :deep(hr) {
+  border: none;
+  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  margin: 2rem 0;
+}
+
+/* 任务列表样式 */
+.markdown-content :deep(.task-list-item) {
+  list-style: none;
+  margin-left: -1.5rem;
+  padding-left: 0;
+  color: #ffffff;
+}
+
+.markdown-content :deep(.task-list-item-checkbox) {
+  margin-right: 0.5rem;
+  margin-left: 0;
+  transform: scale(1.2);
+  accent-color: #60a5fa;
+}
+
+.markdown-content :deep(.task-list-item-checkbox:checked + *) {
+  text-decoration: line-through;
+  opacity: 0.7;
+  color: #ffffff;
+}
+
+/* 强调文本样式 */
+.markdown-content :deep(strong),
+.markdown-content :deep(b) {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.markdown-content :deep(em),
+.markdown-content :deep(i) {
+  color: #ffffff;
+  font-style: italic;
+}
+
+/* 删除线文本 */
+.markdown-content :deep(del),
+.markdown-content :deep(s) {
+  color: #ffffff;
+  text-decoration: line-through;
+}
+
+/* 其他文本元素 */
+.markdown-content :deep(span),
+.markdown-content :deep(div) {
+  color: inherit;
+}
+
+/* 确保所有文本都是白色 */
+.markdown-content :deep(*) {
+  color: inherit;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .markdown-content {
+    padding: 0 15px;
+    font-size: 1rem;
+  }
+  
+  .markdown-content :deep(h1) {
+    font-size: 1.875rem;
+  }
+  
+  .markdown-content :deep(h2) {
+    font-size: 1.5rem;
+  }
+  
+  .markdown-content :deep(h3) {
+    font-size: 1.25rem;
+  }
+  
+  .markdown-content :deep(table) {
+    font-size: 0.875rem;
+  }
+  
+  .markdown-content :deep(.copy-button) {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
+</style>

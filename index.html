@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/webp" href="/icon/index.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fantasy_flowers's Blog</title>
+  <link href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script>
+    /**
+     * Session initialization script - runs BEFORE Vue app loads
+     * This ensures entry gate visibility is determined at the earliest possible moment
+     * 
+     * Key logic (following enterprise standards):
+     * - sessionStorage is isolated per browser tab
+     * - If 'blog_has_entered' exists in sessionStorage → user refreshed page → don't show entry gate
+     * - If 'blog_has_entered' doesn't exist → first visit or new tab → show entry gate
+     * 
+     * This script only sets the state in storage, actual UI rendering is handled by Vue components
+     */
+    (function initializeSession() {
+      'use strict';
+
+      const STORAGE_KEYS = {
+        HAS_ENTERED: 'blog_has_entered',
+        SHOW_ENTRY: 'blog_show_entry'
+      };
+
+      try {
+        const hasEntered = sessionStorage.getItem(STORAGE_KEYS.HAS_ENTERED);
+
+        console.log('[EntryGate Pre-Init] Checking session state:', { hasEntered });
+
+        if (hasEntered === 'true') {
+          // User has already entered in this tab session (page refresh)
+          sessionStorage.setItem(STORAGE_KEYS.SHOW_ENTRY, 'false');
+          console.log('[EntryGate Pre-Init] Refresh detected - entry gate will NOT show');
+        } else {
+          // First visit or new tab - show entry gate
+          sessionStorage.setItem(STORAGE_KEYS.SHOW_ENTRY, 'true');
+          console.log('[EntryGate Pre-Init] First visit/new tab detected - entry gate WILL show');
+        }
+      } catch (error) {
+        console.error('[EntryGate Pre-Init] Error during session check:', error);
+        // On error, default to showing entry gate for safety
+        try {
+          sessionStorage.setItem(STORAGE_KEYS.SHOW_ENTRY, 'true');
+        } catch (e) {
+          console.error('[EntryGate Pre-Init] Failed to set default state:', e);
+        }
+      }
+    })();
+  </script>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

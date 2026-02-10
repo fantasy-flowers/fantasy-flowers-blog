@@ -1,0 +1,10 @@
+// API 统一导出
+export * from './config'
+export * from './request'
+export * as articleAPI from './modules/article'
+export * as categoryAPI from './modules/category'
+export * as tagAPI from './modules/tag'
+export * as friendLinkAPI from './modules/friendLink'
+export * as pageAPI from './modules/page'
+export * as systemConfigAPI from './modules/systemConfig'
+export * as mediaAPI from './modules/media'

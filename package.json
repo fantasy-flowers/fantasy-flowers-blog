@@ -1,0 +1,83 @@
+{
+  "name": "vue-blog",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "基于 Vue 3 + Vite 构建的高性能博客系统",
+  "author": "fantasy_flowers",
+  "license": "MIT",
+  "keywords": [
+    "vue3",
+    "vite",
+    "blog",
+    "pinia",
+    "vue-router",
+    "tailwindcss",
+    "performance-optimization"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/vue-blog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/vue-blog/issues"
+  },
+  "homepage": "https://github.com/yourusername/vue-blog#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "# ===== 开发环境 Development =====": "",
+    "dev": "vite --mode development",
+    "# ===== 构建 Build =====": "",
+    "build": "vite build --mode production",
+    "build:dev": "vite build --mode development",
+    "build:analyze": "vite build --mode production --analyze",
+    "# ===== 预览 Preview =====": "",
+    "preview": "vite preview",
+    "preview:build": "npm run build && vite preview",
+    "# ===== 代码质量 Code Quality =====": "",
+    "format": "prettier --write \"src/**/*.{js,vue,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,vue,css,md}\"",
+    "# ===== 资源优化 Asset Optimization =====": "",
+    "images:generate": "node scripts/generateImages.js",
+    "images:optimize": "node scripts/optimizeImages.js",
+    "verify:optimization": "node scripts/verifyOptimization.js",
+    "# ===== 工具 Utility =====": "",
+    "clean": "rimraf dist node_modules/.vite",
+    "clean:all": "rimraf node_modules dist package-lock.json && npm install",
+    "# ===== 完整流程 Complete Workflows =====": "",
+    "optimize:all": "npm run images:optimize && npm run build",
+    "prepare": "node scripts/generateImages.js || echo 'Image generation skipped'"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0",
+    "@unhead/vue": "^2.0.19",
+    "dompurify": "^3.3.1",
+    "element-plus": "^2.13.2",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.27",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "markdown-it-katex": "^2.0.3",
+    "markdown-it-table-of-contents": "^1.1.0",
+    "markdown-it-task-lists": "^2.1.1",
+    "pinia": "^2.1.6",
+    "unplugin-auto-import": "^21.0.0",
+    "unplugin-vue-components": "^31.0.0",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.16",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^4.1.16",
+    "terser": "^5.44.1",
+    "vite": "^6.0.0",
+    "vite-plugin-compression2": "^2.3.1"
+  }
+}
