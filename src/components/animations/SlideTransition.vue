@@ -20,20 +20,18 @@ defineProps({
 <style scoped>
 /* Slide Up by default */
 .slide-enter-active {
-  transition: all 0.4s ease-out;
+  transition: opacity 0.35s ease-out;
 }
 
 .slide-leave-active {
-  transition: all 0.3s ease-in;
+  transition: opacity 0.2s ease-in;
 }
 
 .slide-enter-from {
   opacity: 0;
-  transform: translateY(20px);
 }
 
 .slide-leave-to {
   opacity: 0;
-  transform: translateY(-20px);
 }
 </style>
