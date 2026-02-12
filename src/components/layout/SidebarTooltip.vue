@@ -15,6 +15,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useSidebarStore } from '@/stores/modules/sidebar'
+import { useThrottle } from '@/composables/useThrottle'
 
 // 定义组件属性
 const props = defineProps({
@@ -158,12 +159,15 @@ const handleResize = () => {
   }
 }
 
+/** 节流后的 resize 处理 */
+const throttledResize = useThrottle(handleResize, 150)
+
 onMounted(() => {
-  window.addEventListener('resize', handleResize)
+  window.addEventListener('resize', throttledResize)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', handleResize)
+  window.removeEventListener('resize', throttledResize)
   if (showTimeout) {
     clearTimeout(showTimeout)
   }

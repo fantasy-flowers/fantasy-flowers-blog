@@ -11,7 +11,13 @@
     </header>
     
     <div class="search-box-wrapper animated-card">
-      <SearchBox ref="searchBoxRef" />
+      <SearchBox
+        ref="searchBoxRef"
+        v-model="localSearchQuery"
+        placeholder="搜索文章..."
+        :debounce-ms="300"
+        @search="handleSearch"
+      />
     </div>
     
     <div v-if="blogStore.searchQuery && blogStore.filteredPosts.length > 0" class="posts-grid-container animated-card" style="animation-delay: 0.4s;">
@@ -28,7 +34,7 @@
           v-if="totalPages > 1"
           :current-page="currentPage"
           :total-pages="totalPages"
-          @page-change="handlePageChange"
+          @update:current-page="handlePageChange"
         />
       </div>
     </div>
@@ -53,9 +59,18 @@ import { setPageMetadata } from '@/utils/metadata'
 
 const blogStore = useBlogStore()
 const searchBoxRef = ref(null)
+const localSearchQuery = ref(blogStore.searchQuery || '')
 
 const searchQuery = computed(() => blogStore.searchQuery)
 const searchResults = computed(() => blogStore.filteredPosts)
+
+/**
+ * 处理搜索事件，将查询同步到 store
+ * @param {string} query - 搜索关键词
+ */
+const handleSearch = (query) => {
+  blogStore.setSearchQuery(query)
+}
 
 // 分页设置
 const currentPage = ref(1)
@@ -101,17 +116,18 @@ onMounted(() => {
   
   // 自动聚焦搜索输入框
   nextTick(() => {
-    const searchInput = document.getElementById('search-input')
-    if (searchInput) {
-      searchInput.focus()
-    }
+    searchBoxRef.value?.focus()
   })
 })
 
 // 监听搜索查询变化，更新元数据
-watch(searchQuery, () => {
+watch(searchQuery, (newQuery) => {
   currentPage.value = 1
   updateMetadata()
+  // 同步外部 store 变化到本地搜索值
+  if (newQuery !== localSearchQuery.value) {
+    localSearchQuery.value = newQuery || ''
+  }
 })
 </script>
 <style scoped>

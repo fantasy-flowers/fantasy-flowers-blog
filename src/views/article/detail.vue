@@ -190,6 +190,7 @@ import { useSidebarStore } from '@/stores/modules/sidebar'
 import { setPageMetadata } from '@/utils/metadata'
 import { generateTOC } from '@/utils/markdownUtils'
 import { getImageUrl } from '@/utils/imageUrl'
+import { useThrottle } from '@/composables/useThrottle'
 import MarkdownRenderer from '@/components/business/MarkdownRenderer.vue'
 import LoadingSpinner from '@/components/base/LoadingSpinner.vue'
 import SlideTransition from '@/components/animations/SlideTransition.vue'
@@ -334,6 +335,12 @@ const checkMobile = () => {
   }
 }
 
+/** 节流后的 resize 处理 */
+const throttledCheckMobile = useThrottle(checkMobile, 150)
+
+/** 节流后的 scroll 处理（目录高亮） */
+const throttledUpdateActiveHeading = useThrottle(updateActiveHeading, 100)
+
 const navigateToPost = async (postId) => {
   await router.push({ name: 'post-detail', params: { id: postId } })
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -402,16 +409,16 @@ const loadArticle = async (postId) => {
 
 onMounted(async () => {
   checkMobile()
-  window.addEventListener('resize', checkMobile)
-  window.addEventListener('scroll', updateActiveHeading)
+  window.addEventListener('resize', throttledCheckMobile)
+  window.addEventListener('scroll', throttledUpdateActiveHeading)
   
   const postId = parseInt(route.params.id)
   await loadArticle(postId)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', checkMobile)
-  window.removeEventListener('scroll', updateActiveHeading)
+  window.removeEventListener('resize', throttledCheckMobile)
+  window.removeEventListener('scroll', throttledUpdateActiveHeading)
   document.body.style.overflow = ''
 })
 

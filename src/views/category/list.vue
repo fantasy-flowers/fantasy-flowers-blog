@@ -25,7 +25,7 @@
         v-if="totalPages > 1"
         :current-page="currentPage"
         :total-pages="totalPages"
-        @page-change="handlePageChange"
+        @update:current-page="handlePageChange"
       />
     </div>
     

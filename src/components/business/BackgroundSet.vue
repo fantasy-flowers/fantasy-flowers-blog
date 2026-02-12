@@ -12,15 +12,10 @@
             <span>{{ errorMessage }}</span>
           </div>
           
-          <!-- 背景图片选择组件 -->
+          <!-- 背景设置组件（含图片选择、预览、透明度控制） -->
           <BackgroundSelector 
             @error="handleError"
             ref="backgroundSelectorRef"
-          />
-          
-          <!-- 背景透明度控制组件 -->
-          <BackgroundOpacityControl 
-            ref="opacityControlRef"
           />
         </div>
       </transition>
@@ -29,14 +24,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
-import BackgroundSelector from './BackgroundSelector.vue'
-import BackgroundOpacityControl from './BackgroundOpacityControl.vue'
+import { ref, defineAsyncComponent, onMounted, onUnmounted, nextTick } from 'vue'
+import LoadingSpinner from '../base/LoadingSpinner.vue'
+import LoadError from '../base/LoadError.vue'
+
+// 懒加载大型背景选择器组件
+const BackgroundSelector = defineAsyncComponent({
+  loader: () => import('./BackgroundSelector.vue'),
+  loadingComponent: LoadingSpinner,
+  errorComponent: LoadError,
+  delay: 200,
+  timeout: 10000
+})
 
 const isPanelOpen = ref(false)
 const errorMessage = ref('') // 错误信息
 const backgroundSelectorRef = ref(null)
-const opacityControlRef = ref(null)
 const controlPanel = ref(null)
 
 // 防抖变量

@@ -32,7 +32,7 @@
 
 // ==================== 导入依赖 ====================
 // Vue 核心
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, defineAsyncComponent, onMounted, onUnmounted, computed } from 'vue'
 import { RouterView, useRouter } from 'vue-router'
 
 // 布局组件
@@ -42,8 +42,18 @@ import BackToTop from './components/base/BackToTop.vue'
 import NavButtonsGroup from './components/layout/NavButtonsGroup.vue'
 import SiteFooter from './components/layout/SiteFooter.vue'
 
-// 业务组件
-import EntryGate from './components/business/EntryGate.vue'
+// 加载回退组件（同步导入，用于 defineAsyncComponent 配置）
+import LoadingSpinner from './components/base/LoadingSpinner.vue'
+import LoadError from './components/base/LoadError.vue'
+
+// 业务组件 - 懒加载大型组件
+const EntryGate = defineAsyncComponent({
+  loader: () => import('./components/business/EntryGate.vue'),
+  loadingComponent: LoadingSpinner,
+  errorComponent: LoadError,
+  delay: 200,
+  timeout: 10000
+})
 
 // 状态管理
 import { useSidebarStore } from '@/stores/modules/sidebar'
@@ -51,6 +61,7 @@ import { useBlogStore } from '@/stores/modules/blog'
 
 // 组合式函数
 import { initBackgroundSettings } from '@/composables/useBackgroundSettings'
+import { useThrottle } from '@/composables/useThrottle'
 
 // ==================== 初始化 ====================
 // 从 localStorage 初始化背景设置
@@ -125,6 +136,9 @@ const handleResize = () => {
   windowWidth.value = window.innerWidth
 }
 
+/** 节流后的 resize 处理（每 150ms 最多执行一次） */
+const throttledResize = useThrottle(handleResize, 150)
+
 /**
  * 处理入场完成事件
  */
@@ -160,12 +174,12 @@ onMounted(async () => {
   window.addEventListener('storage', handleStorageChange)
   
   // 监听窗口大小变化
-  window.addEventListener('resize', handleResize)
+  window.addEventListener('resize', throttledResize)
 })
 
 onUnmounted(() => {
   window.removeEventListener('storage', handleStorageChange)
-  window.removeEventListener('resize', handleResize)
+  window.removeEventListener('resize', throttledResize)
 })
 </script>
 
