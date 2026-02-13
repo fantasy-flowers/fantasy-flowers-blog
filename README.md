@@ -621,7 +621,7 @@ performanceMonitor.getMetrics()
 
 | 变量名 | 说明 | 默认值 | 必填 |
 |--------|------|--------|------|
-| `VITE_API_BASE_URL` | 后端 API 地址 | `http://localhost:3000/api/v1` | 是 |
+| `VITE_API_BASE_URL` | 后端 API 地址 | `http://localhost:3000/api` | 是 |
 | `VITE_APP_TITLE` | 网站标题 | `fantasy_flowers's Blog` | 是 |
 | `VITE_APP_DESCRIPTION` | 网站描述 | - | 否 |
 | `VITE_SITE_URL` | 网站 URL | `http://localhost:5173` | 是 |
@@ -683,7 +683,7 @@ module.exports = {
 #### 获取文章列表
 
 ```http
-GET /api/v1/articles
+GET /api/articles
 ```
 
 参数：
@@ -714,7 +714,7 @@ GET /api/v1/articles
 #### 获取文章详情
 
 ```http
-GET /api/v1/articles/:id
+GET /api/articles/:id
 ```
 
 响应：
@@ -740,7 +740,7 @@ GET /api/v1/articles/:id
 #### 获取分类列表
 
 ```http
-GET /api/v1/categories
+GET /api/categories
 ```
 
 ### 标签接口
@@ -748,7 +748,7 @@ GET /api/v1/categories
 #### 获取标签列表
 
 ```http
-GET /api/v1/tags
+GET /api/tags
 ```
 
 更多 API 文档请参考 `src/api/modules/` 目录下的接口定义。
