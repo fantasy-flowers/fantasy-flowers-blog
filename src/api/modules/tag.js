@@ -1,47 +1,73 @@
-// 标签相关 API
-import { get, post, put, del } from '../request'
-import { API_ENDPOINTS } from '../config'
+/**
+ * 标签相关 API
+ * @module api/modules/tag
+ */
+import { get, post, put, del } from '@/utils/http'
+
+/**
+ * 接口地址
+ */
+const URLS = {
+  LIST: '/tags',
+  DETAIL: (id) => `/tags/${id}`,
+  CREATE: '/tags',
+  UPDATE: (id) => `/tags/${id}`,
+  DELETE: (id) => `/tags/${id}`
+}
+
+/**
+ * @typedef {Object} TagQueryParams
+ * @property {number} [page] - 页码
+ * @property {number} [pageSize] - 每页数量
+ */
+
+/**
+ * @typedef {Object} TagDTO
+ * @property {string} name - 标签名称
+ */
 
 /**
  * 获取标签列表
- * @param {Object} params - 查询参数
- * @param {number} params.page - 页码（可选）
- * @param {number} params.pageSize - 每页数量（可选）
+ * @param {TagQueryParams} params - 查询参数
+ * @returns {Promise<any>}
  */
 export function getTags(params = {}) {
-  return get(API_ENDPOINTS.TAGS.LIST, params)
+  return get(URLS.LIST, params)
 }
 
 /**
  * 获取标签详情
  * @param {number} id - 标签ID
+ * @returns {Promise<any>}
  */
 export function getTagDetail(id) {
-  return get(API_ENDPOINTS.TAGS.DETAIL(id))
+  return get(URLS.DETAIL(id))
 }
 
 /**
  * 创建标签
- * @param {Object} data - 标签数据
- * @param {string} data.name - 标签名称
+ * @param {TagDTO} data - 标签数据
+ * @returns {Promise<any>}
  */
 export function createTag(data) {
-  return post(API_ENDPOINTS.TAGS.CREATE, data)
+  return post(URLS.CREATE, data)
 }
 
 /**
  * 更新标签
  * @param {number} id - 标签ID
- * @param {Object} data - 标签数据
+ * @param {TagDTO} data - 标签数据
+ * @returns {Promise<any>}
  */
 export function updateTag(id, data) {
-  return put(API_ENDPOINTS.TAGS.UPDATE(id), data)
+  return put(URLS.UPDATE(id), data)
 }
 
 /**
  * 删除标签
  * @param {number} id - 标签ID
+ * @returns {Promise<any>}
  */
 export function deleteTag(id) {
-  return del(API_ENDPOINTS.TAGS.DELETE(id))
+  return del(URLS.DELETE(id))
 }

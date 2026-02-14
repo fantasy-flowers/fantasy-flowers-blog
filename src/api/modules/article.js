@@ -1,66 +1,94 @@
-// 文章相关 API
-import { get, post, put, del } from '../request'
-import { API_ENDPOINTS } from '../config'
+/**
+ * 文章相关 API
+ * @module api/modules/article
+ */
+import { get, post, put, del } from '@/utils/http'
+
+/**
+ * 接口地址
+ */
+const URLS = {
+  LIST: '/articles',
+  DETAIL: (id) => `/articles/${id}`,
+  CREATE: '/articles',
+  UPDATE: (id) => `/articles/${id}`,
+  DELETE: (id) => `/articles/${id}`,
+  UPDATE_STATUS: (id) => `/articles/${id}/status`
+}
+
+/**
+ * @typedef {Object} ArticleQueryParams
+ * @property {number} [page] - 页码
+ * @property {number} [pageSize] - 每页数量
+ * @property {string} [status] - 状态筛选 (draft/published)
+ * @property {number} [categoryId] - 分类ID
+ * @property {string} [keyword] - 搜索关键词
+ */
+
+/**
+ * @typedef {Object} ArticleDTO
+ * @property {string} title - 标题
+ * @property {string} summary - 简介
+ * @property {string} content - 内容
+ * @property {string} [cover_image] - 封面图
+ * @property {string} [category_name] - 分类名称
+ * @property {Array<string>} [tag_names] - 标签名称数组
+ * @property {string} [status] - 状态 (draft/published)
+ * @property {number} [is_top] - 是否置顶
+ */
 
 /**
  * 获取文章列表
- * @param {Object} params - 查询参数
- * @param {number} params.page - 页码
- * @param {number} params.pageSize - 每页数量
- * @param {string} params.status - 状态筛选 (draft/published)
- * @param {number} params.categoryId - 分类ID
- * @param {string} params.keyword - 搜索关键词
+ * @param {ArticleQueryParams} params - 查询参数
+ * @returns {Promise<any>}
  */
 export function getArticles(params = {}) {
-  return get(API_ENDPOINTS.ARTICLES.LIST, params)
+  return get(URLS.LIST, params)
 }
 
 /**
  * 获取文章详情
  * @param {number} id - 文章ID
+ * @returns {Promise<any>}
  */
 export function getArticleDetail(id) {
-  return get(API_ENDPOINTS.ARTICLES.DETAIL(id))
+  return get(URLS.DETAIL(id))
 }
 
 /**
  * 创建文章
- * @param {Object} data - 文章数据
- * @param {string} data.title - 标题
- * @param {string} data.summary - 简介
- * @param {string} data.content - 内容
- * @param {string} data.cover_image - 封面图
- * @param {string} data.category_name - 分类名称
- * @param {Array<string>} data.tag_names - 标签名称数组
- * @param {string} data.status - 状态 (draft/published)
- * @param {number} data.is_top - 是否置顶
+ * @param {ArticleDTO} data - 文章数据
+ * @returns {Promise<any>}
  */
 export function createArticle(data) {
-  return post(API_ENDPOINTS.ARTICLES.CREATE, data)
+  return post(URLS.CREATE, data)
 }
 
 /**
  * 更新文章
  * @param {number} id - 文章ID
- * @param {Object} data - 文章数据
+ * @param {ArticleDTO} data - 文章数据
+ * @returns {Promise<any>}
  */
 export function updateArticle(id, data) {
-  return put(API_ENDPOINTS.ARTICLES.UPDATE(id), data)
+  return put(URLS.UPDATE(id), data)
 }
 
 /**
  * 删除文章
  * @param {number} id - 文章ID
+ * @returns {Promise<any>}
  */
 export function deleteArticle(id) {
-  return del(API_ENDPOINTS.ARTICLES.DELETE(id))
+  return del(URLS.DELETE(id))
 }
 
 /**
  * 更新文章状态
  * @param {number} id - 文章ID
  * @param {string} status - 状态 (draft/published)
+ * @returns {Promise<any>}
  */
 export function updateArticleStatus(id, status) {
-  return put(API_ENDPOINTS.ARTICLES.UPDATE_STATUS(id), { status })
+  return put(URLS.UPDATE_STATUS(id), { status })
 }

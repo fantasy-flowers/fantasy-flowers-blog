@@ -33,7 +33,10 @@ export const useBlogStore = defineStore('blog', {
       site_name: '',
       site_description: '',
       site_keywords: '',
-      github_link: 'https://github.com/'
+      beian_number: 'xxxxx',
+      github_link: 'https://github.com/',
+      // 保留完整配置对象以供高级使用
+      fullConfig: null
     },
 
     // 筛选条件
@@ -337,8 +340,8 @@ export const useBlogStore = defineStore('blog', {
           this.fetchArticles({ page: 1, pageSize: 1000 }),
           this.fetchCategories(),
           this.fetchTags(),
-          this.fetchFriendLinks(),
-          this.fetchSystemConfig()
+          this.fetchFriendLinks()
+          // fetchSystemConfig 已移除，配置在 main.js 中初始化
         ])
       } catch (error) {
         console.error('初始化数据失败:', error)
@@ -383,30 +386,37 @@ export const useBlogStore = defineStore('blog', {
     },
 
     /**
-     * 获取系统配置
+     * 设置系统配置 (从 site.json 加载)
+     * @param {Object} config - 配置对象
+     */
+    setSystemConfig(config) {
+      if (!config) return
+
+      // 保存完整配置
+      this.systemConfig.fullConfig = config
+
+      // 映射到扁平化结构，保持向下兼容
+      if (config.meta) {
+        this.systemConfig.site_name = config.meta.siteName || ''
+        this.systemConfig.beian_number = config.meta.beianNumber || ''
+      }
+
+      if (config.seo) {
+        this.systemConfig.site_description = config.seo.defaultDescription || ''
+        this.systemConfig.site_keywords = config.seo.keywords || ''
+      }
+      
+      // 联系方式中的 github 链接（如果有）
+      // 这里假设 config.contact 中可能包含 github，或者保持默认
+      // 如果 site.json 中没有专门的 github 字段，可以考虑加进去或者映射 meta 中的其他字段
+    },
+
+    /**
+     * 获取系统配置 (已废弃，保留兼容性，但不再调用 API)
      */
     async fetchSystemConfig() {
-      try {
-        const config = await getSystemConfigs()
-        this.systemConfig = {
-          site_name: config.site_name || '',
-          site_description: config.site_description || '',
-          site_keywords: config.site_keywords || '',
-          github_link: config.github_link || 'https://github.com/'
-        }
-        return this.systemConfig
-      } catch (error) {
-        this.error = error.message
-        console.error('获取系统配置失败:', error)
-        // 使用默认配置
-        this.systemConfig = {
-          site_name: '',
-          site_description: '',
-          site_keywords: '',
-          github_link: 'https://github.com/'
-        }
-        return this.systemConfig
-      }
+      // 此方法不再需要主动调用后端 API，配置已在应用启动时加载
+      return this.systemConfig
     },
 
     // 兼容旧方法

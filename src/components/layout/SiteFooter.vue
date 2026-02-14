@@ -8,9 +8,9 @@
         </p>
         
         <!-- 备案信息 -->
-        <div class="备案信息" v-if="beianNumber">
+        <div class="beian-info" v-if="beianNumber">
           <a 
-            :href="`https://beian.miit.gov.cn/`" 
+            href="https://beian.miit.gov.cn/" 
             target="_blank" 
             rel="noopener noreferrer"
             class="beian-link"
@@ -58,8 +58,8 @@ const currentYear = computed(() => new Date().getFullYear())
 // 站点名称 - 从store中获取
 const siteName = computed(() => blogStore.systemConfig?.site_name )
 
-// 备案号 - 可根据需要在systemConfig中添加
-const beianNumber = ref('')
+// 备案号 - 从store中获取
+const beianNumber = computed(() => blogStore.systemConfig?.beian_number)
 
 // 是否显示社交链接
 const showSocialLinks = ref(true)
@@ -94,17 +94,7 @@ const socialLinks = computed(() => {
   return links
 })
 
-// 从系统配置中加载备案信息（如果有的话）
-onMounted(async () => {
-  try {
-    // 如果配置中有备案号，使用配置中的
-    if (blogStore.systemConfig?.beian_number) {
-      beianNumber.value = blogStore.systemConfig.beian_number
-    }
-  } catch (error) {
-    console.error('Failed to load footer config:', error)
-  }
-})
+
 </script>
 
 <style scoped>

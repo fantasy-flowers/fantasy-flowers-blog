@@ -60,6 +60,7 @@ import Pagination from '@/components/base/Pagination.vue'
 import ListTransition from '@/components/animations/ListTransition.vue'
 import { useBlogStore } from '@/stores/modules/blog'
 import { setPageMetadata } from '@/utils/metadata'
+import { poemAPI } from '@/api'
 
 const blogStore = useBlogStore()
 
@@ -70,11 +71,9 @@ const poemLoaded = ref(false)
 // 从poem.json中随机获取一首诗词
 const fetchRandomPoem = async () => {
   try {
-    const response = await fetch('/poem/poem.json')
-    if (response.ok) {
-      const poems = await response.json()
-      const randomIndex = Math.floor(Math.random() * poems.length)
-      poem.value = poems[randomIndex]
+    const data = await poemAPI.getRandomPoem()
+    if (data) {
+      poem.value = data
       poemLoaded.value = true
     }
   } catch (error) {

@@ -1,61 +1,89 @@
-// 友情链接相关 API
-import { get, post, put, del } from '../request'
-import { API_ENDPOINTS } from '../config'
+/**
+ * 友情链接相关 API
+ * @module api/modules/friendLink
+ */
+import { get, post, put, del } from '@/utils/http'
+
+/**
+ * 接口地址
+ */
+const URLS = {
+  LIST: '/friend-links',
+  DETAIL: (id) => `/friend-links/${id}`,
+  CREATE: '/friend-links',
+  UPDATE: (id) => `/friend-links/${id}`,
+  DELETE: (id) => `/friend-links/${id}`,
+  UPDATE_STATUS: (id) => `/friend-links/${id}/status`
+}
+
+/**
+ * @typedef {Object} FriendLinkQueryParams
+ * @property {number} [page] - 页码
+ * @property {number} [pageSize] - 每页数量
+ */
+
+/**
+ * @typedef {Object} FriendLinkDTO
+ * @property {string} name - 链接名称
+ * @property {string} url - 链接URL
+ * @property {string} [icon] - 图标URL
+ * @property {string} [description] - 描述
+ * @property {number} [status] - 状态 (0/1)
+ * @property {number} [sort_order] - 排序顺序
+ */
 
 /**
  * 获取友情链接列表
- * @param {Object} params - 查询参数
- * @param {number} params.page - 页码（可选）
- * @param {number} params.pageSize - 每页数量（可选）
+ * @param {FriendLinkQueryParams} params - 查询参数
+ * @returns {Promise<any>}
  */
 export function getFriendLinks(params = {}) {
-  return get(API_ENDPOINTS.FRIEND_LINKS.LIST, params)
+  return get(URLS.LIST, params)
 }
 
 /**
  * 获取友情链接详情
  * @param {number} id - 友情链接ID
+ * @returns {Promise<any>}
  */
 export function getFriendLinkDetail(id) {
-  return get(API_ENDPOINTS.FRIEND_LINKS.DETAIL(id))
+  return get(URLS.DETAIL(id))
 }
 
 /**
  * 创建友情链接
- * @param {Object} data - 友情链接数据
- * @param {string} data.name - 链接名称
- * @param {string} data.url - 链接URL
- * @param {string} data.icon - 图标URL
- * @param {string} data.description - 描述
- * @param {number} data.status - 状态 (0/1)
- * @param {number} data.sort_order - 排序顺序
+ * @param {FriendLinkDTO} data - 友情链接数据
+ * @returns {Promise<any>}
  */
 export function createFriendLink(data) {
-  return post(API_ENDPOINTS.FRIEND_LINKS.CREATE, data)
+  return post(URLS.CREATE, data)
 }
 
 /**
  * 更新友情链接
  * @param {number} id - 友情链接ID
- * @param {Object} data - 友情链接数据
+ * @param {FriendLinkDTO} data - 友情链接数据
+ * @returns {Promise<any>}
  */
 export function updateFriendLink(id, data) {
-  return put(API_ENDPOINTS.FRIEND_LINKS.UPDATE(id), data)
+  return put(URLS.UPDATE(id), data)
 }
 
 /**
  * 删除友情链接
  * @param {number} id - 友情链接ID
+ * @returns {Promise<any>}
  */
 export function deleteFriendLink(id) {
-  return del(API_ENDPOINTS.FRIEND_LINKS.DELETE(id))
+  return del(URLS.DELETE(id))
 }
 
 /**
  * 更新友情链接状态
  * @param {number} id - 友情链接ID
  * @param {number} status - 状态 (0/1)
+ * @returns {Promise<any>}
  */
 export function updateFriendLinkStatus(id, status) {
-  return put(API_ENDPOINTS.FRIEND_LINKS.UPDATE_STATUS(id), { status })
+  return put(URLS.UPDATE_STATUS(id), { status })
 }

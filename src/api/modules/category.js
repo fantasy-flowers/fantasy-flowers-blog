@@ -1,48 +1,74 @@
-// 分类相关 API
-import { get, post, put, del } from '../request'
-import { API_ENDPOINTS } from '../config'
+/**
+ * 分类相关 API
+ * @module api/modules/category
+ */
+import { get, post, put, del } from '@/utils/http'
+
+/**
+ * 接口地址
+ */
+const URLS = {
+  LIST: '/categories',
+  DETAIL: (id) => `/categories/${id}`,
+  CREATE: '/categories',
+  UPDATE: (id) => `/categories/${id}`,
+  DELETE: (id) => `/categories/${id}`
+}
+
+/**
+ * @typedef {Object} CategoryQueryParams
+ * @property {number} [page] - 页码
+ * @property {number} [pageSize] - 每页数量
+ */
+
+/**
+ * @typedef {Object} CategoryDTO
+ * @property {string} name - 分类名称
+ * @property {string} [description] - 分类描述
+ */
 
 /**
  * 获取分类列表
- * @param {Object} params - 查询参数
- * @param {number} params.page - 页码（可选）
- * @param {number} params.pageSize - 每页数量（可选）
+ * @param {CategoryQueryParams} params - 查询参数
+ * @returns {Promise<any>}
  */
 export function getCategories(params = {}) {
-  return get(API_ENDPOINTS.CATEGORIES.LIST, params)
+  return get(URLS.LIST, params)
 }
 
 /**
  * 获取分类详情
  * @param {number} id - 分类ID
+ * @returns {Promise<any>}
  */
 export function getCategoryDetail(id) {
-  return get(API_ENDPOINTS.CATEGORIES.DETAIL(id))
+  return get(URLS.DETAIL(id))
 }
 
 /**
  * 创建分类
- * @param {Object} data - 分类数据
- * @param {string} data.name - 分类名称
- * @param {string} data.description - 分类描述
+ * @param {CategoryDTO} data - 分类数据
+ * @returns {Promise<any>}
  */
 export function createCategory(data) {
-  return post(API_ENDPOINTS.CATEGORIES.CREATE, data)
+  return post(URLS.CREATE, data)
 }
 
 /**
  * 更新分类
  * @param {number} id - 分类ID
- * @param {Object} data - 分类数据
+ * @param {CategoryDTO} data - 分类数据
+ * @returns {Promise<any>}
  */
 export function updateCategory(id, data) {
-  return put(API_ENDPOINTS.CATEGORIES.UPDATE(id), data)
+  return put(URLS.UPDATE(id), data)
 }
 
 /**
  * 删除分类
  * @param {number} id - 分类ID
+ * @returns {Promise<any>}
  */
 export function deleteCategory(id) {
-  return del(API_ENDPOINTS.CATEGORIES.DELETE(id))
+  return del(URLS.DELETE(id))
 }

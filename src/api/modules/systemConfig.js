@@ -1,18 +1,30 @@
-// 系统配置相关 API
-import { get, put } from '../request'
-import { API_ENDPOINTS } from '../config'
+/**
+ * 系统配置相关 API
+ * @module api/modules/systemConfig
+ */
+import { get, put } from '@/utils/http'
+
+/**
+ * 接口地址
+ */
+const URLS = {
+  GET: '/configs',
+  UPDATE: '/configs'
+}
 
 /**
  * 获取系统配置
+ * @returns {Promise<any>}
  */
 export function getSystemConfigs() {
-  return get(API_ENDPOINTS.CONFIGS.GET)
+  return get(URLS.GET)
 }
 
 /**
  * 更新系统配置
  * @param {Object} configs - 配置对象
+ * @returns {Promise<any>}
  */
 export function updateSystemConfigs(configs) {
-  return put(API_ENDPOINTS.CONFIGS.UPDATE, configs)
+  return put(URLS.UPDATE, configs)
 }

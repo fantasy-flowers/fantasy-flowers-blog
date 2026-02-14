@@ -44,6 +44,7 @@
     "images:generate": "node scripts/generateImages.js",
     "images:optimize": "node scripts/optimizeImages.js",
     "verify:optimization": "node scripts/verifyOptimization.js",
+    "verify:config": "node scripts/verifyConfig.js",
     "# ===== 工具 Utility =====": "",
     "clean": "rimraf dist node_modules/.vite",
     "clean:all": "rimraf node_modules dist package-lock.json && npm install",
@@ -54,6 +55,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@unhead/vue": "^2.0.19",
+    "axios": "^1.13.5",
     "dompurify": "^3.3.1",
     "element-plus": "^2.13.2",
     "highlight.js": "^11.11.1",
@@ -73,6 +75,7 @@
     "@tailwindcss/postcss": "^4.1.16",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
+    "ajv": "^8.17.1",
     "autoprefixer": "^10.4.21",
     "happy-dom": "^20.6.1",
     "jsdom": "^28.0.0",
