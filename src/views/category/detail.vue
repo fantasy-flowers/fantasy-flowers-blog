@@ -1,6 +1,7 @@
 <template>
   <AnimatedContainer :duration="500">
     <div class="category-page">
+      <NavigationControls />
       <AnimatedHeader :duration="600">
         <header class="header">
           <h1 class="header-title">分类: {{ categoryName }}</h1>
@@ -57,6 +58,7 @@ import { computed, onMounted, watch, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import PostCard from '@/components/business/PostCard.vue'
 import Pagination from '@/components/base/Pagination.vue'
+import NavigationControls from '@/components/base/NavigationControls.vue'
 import AnimatedContainer from '@/components/animations/AnimatedContainer.vue'
 import AnimatedHeader from '@/components/animations/AnimatedHeader.vue'
 import AnimatedGrid from '@/components/animations/AnimatedGrid.vue'

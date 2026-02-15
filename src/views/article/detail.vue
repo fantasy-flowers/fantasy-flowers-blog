@@ -4,27 +4,7 @@
     <SlideTransition mode="out-in">
       <div :key="route.params.id" class="post-detail-wrapper">
         <!-- 返回导航按钮 -->
-        <div class="navigation-controls animated-nav" :style="navigationControlsStyle">
-          <button 
-            @click="goBack"
-            :disabled="!canGoBack"
-            :aria-disabled="!canGoBack"
-            class="nav-control-btn back-btn"
-            aria-label="返回上一页"
-          >
-            <i class="fa fa-arrow-left"></i>
-            <span>返回</span>
-          </button>
-          
-          <button 
-            @click="goToHome"
-            class="nav-control-btn home-btn"
-            aria-label="前往首页"
-          >
-            <i class="fa fa-home"></i>
-            <span>首页</span>
-          </button>
-        </div>
+        <NavigationControls />
         
         <div v-if="blogStore.postsLoading" class="loading-state">
           <LoadingSpinner text="加载中..." />
@@ -193,54 +173,20 @@ import { getImageUrl } from '@/utils/imageUrl'
 import { useThrottle } from '@/composables/useThrottle'
 import MarkdownRenderer from '@/components/business/MarkdownRenderer.vue'
 import LoadingSpinner from '@/components/base/LoadingSpinner.vue'
+import NavigationControls from '@/components/base/NavigationControls.vue'
 import SlideTransition from '@/components/animations/SlideTransition.vue'
 import FadeTransition from '@/components/animations/FadeTransition.vue'
 
 const route = useRoute()
 const router = useRouter()
 const blogStore = useBlogStore()
-const sidebarStore = useSidebarStore()
+// const sidebarStore = useSidebarStore()
 
 // 响应式状态
 const isMobile = ref(false)
 const mobileMenuOpen = ref(false)
 const activeHeading = ref('')
 const articleContent = ref(null)
-
-// 计算导航控件的样式
-const navigationControlsStyle = computed(() => {
-  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
-    return { left: '80px' }
-  }
-  
-  let leftPosition = '290px'
-  
-  if (typeof window !== 'undefined') {
-    const windowWidth = window.innerWidth
-    
-    if (windowWidth >= 3840) {
-      const sidebarWidth = sidebarStore.isCollapsed ? 170 : 330
-      leftPosition = `calc(50vw - 700px + ${sidebarWidth}px + 40px)`
-    } else if (windowWidth >= 2800) {
-      const sidebarWidth = sidebarStore.isCollapsed ? 170 : 330
-      leftPosition = `calc(50vw - 700px + ${sidebarWidth}px + 40px)`
-    } else if (windowWidth >= 1921) {
-      const sidebarWidth = sidebarStore.isCollapsed ? 88 : 250
-      leftPosition = `calc(${sidebarWidth}px + 40px)`
-    } else if (windowWidth >= 1200) {
-      const sidebarWidth = sidebarStore.isCollapsed ? 88 : 250
-      leftPosition = `calc(${sidebarWidth}px + 40px)`
-    } else {
-      const sidebarWidth = sidebarStore.isCollapsed ? 88 : 250
-      leftPosition = `calc(${sidebarWidth}px + 40px)`
-    }
-  } else {
-    const sidebarWidth = sidebarStore.isCollapsed ? 88 : 250
-    leftPosition = `calc(${sidebarWidth}px + 40px)`
-  }
-  
-  return { left: leftPosition }
-})
 
 const post = computed(() => blogStore.currentPost || blogStore.getPostById(parseInt(route.params.id)))
 const prevPost = computed(() => blogStore.getPrevPost(parseInt(route.params.id)))
@@ -349,20 +295,6 @@ const navigateToPost = async (postId) => {
 const navigateToTag = (tag) => {
   router.push({ name: 'tag', params: { name: tag } })
 }
-
-const goBack = () => {
-  if (canGoBack.value) {
-    history.back()
-  }
-}
-
-const goToHome = () => {
-  router.push({ name: 'home' })
-}
-
-const canGoBack = computed(() => {
-  return history.length > 1
-})
 
 // 设置页面元数据
 const updateMetadata = () => {
@@ -756,21 +688,7 @@ watch(post, () => {
 }
 
 /* ===== 导航按钮样式 ===== */
-.animated-nav {
-  animation: slideDown 0.6s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    transform: translateY(-30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
+/* 已移至 NavigationControls.vue */
 .animated-card {
   animation: slideUp 0.6s ease-out;
   opacity: 0;
@@ -789,53 +707,6 @@ watch(post, () => {
   }
 }
 
-.navigation-controls {
-  position: fixed;
-  top: 20px;
-  display: flex;
-  gap: 12px;
-  z-index: 100;
-  transition: all 0.3s ease;
-}
-
-.nav-control-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  min-width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  background-color: rgba(30, 42, 58, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #E2E8F0;
-}
-
-.nav-control-btn i {
-  font-size: 1em;
-  transition: transform 0.2s ease;
-}
-
-.nav-control-btn:hover:not(:disabled) {
-  background-color: rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #93C5FD;
-  transform: translateY(-3px) scale(1.1);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.nav-control-btn:active:not(:disabled) {
-  background-color: rgba(59, 130, 246, 0.3);
-  border-color: #3B82F6;
-  transform: translateY(-1px) scale(1.05);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
 /* ===== 响应式设计 ===== */
 
 /* 平板设备 */
@@ -851,10 +722,6 @@ watch(post, () => {
   
   .article-title {
     font-size: 1.75rem;
-  }
-  
-  .navigation-controls {
-    top: 15px;
   }
 }
 
@@ -919,24 +786,6 @@ watch(post, () => {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
-  .navigation-controls {
-    top: 15px;
-    flex-direction: row;
-    position: fixed;
-    gap: 8px;
-  }
-  
-  .nav-control-btn {
-    padding: 8px 12px;
-    min-width: 36px;
-    height: 36px;
-    font-size: 12px;
-  }
-  
-  .nav-control-btn span {
-    display: none;
-  }
 }
 
 /* 大屏幕 */
@@ -947,36 +796,6 @@ watch(post, () => {
   
   .article-title {
     font-size: 2.25rem;
-  }
-}
-
-/* 超高分辨率 */
-@media (min-width: 2800px) {
-  .navigation-controls {
-    top: 30px;
-  }
-  
-  .nav-control-btn {
-    padding: 14px 20px;
-    min-width: 48px;
-    height: 48px;
-    font-size: 15px;
-  }
-}
-
-/* 4K屏幕 */
-@media (min-width: 3840px) {
-  .navigation-controls {
-    top: 40px;
-    gap: 16px;
-  }
-  
-  .nav-control-btn {
-    padding: 16px 24px;
-    min-width: 52px;
-    height: 52px;
-    font-size: 16px;
-    border-radius: 10px;
   }
 }
 
