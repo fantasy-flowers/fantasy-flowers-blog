@@ -13,8 +13,10 @@
     <!-- 桌面端侧边栏 -->
     <AppSidebar class="desktop-sidebar" />
     <div class="main-content" :style="mainContentStyle">
-      <RouterView />
-      <BackToTop />
+      <div class="page-body">
+        <RouterView />
+        <BackToTop />
+      </div>
       <SiteFooter />
     </div>
   </div>
@@ -207,7 +209,7 @@ onUnmounted(() => {
   flex: 1;
   min-height: 100vh;
   background-color: transparent;
-  padding: 20px;
+  padding: 0;
   width: 100%; /* 使用全宽度 */
   max-width: none; /* 移除最大宽度限制 */
   margin: 0; /* 移除自动居中 */
@@ -220,18 +222,26 @@ onUnmounted(() => {
   flex-direction: column;
 }
 
+.page-body {
+  flex: 1;
+  min-height: 0;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 
 
 /* 响应式设计：大型平板设备 (1024px - 1200px) */
 @media (max-width: 1200px) and (min-width: 1025px) {
-  .main-content {
+  .page-body {
     padding: 20px 30px;
   }
 }
 
 /* 响应式设计：标准平板设备 (768px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
-  .main-content {
+  .page-body {
     padding: 18px 25px;
   }
 }
@@ -259,6 +269,9 @@ onUnmounted(() => {
   .main-content {
     width: 100%;
     margin-left: 0; /* 移动端不需要为侧边栏留出空间 */
+  }
+
+  .page-body {
     padding: 16px 20px;
   }
 }
@@ -281,6 +294,9 @@ onUnmounted(() => {
   .main-content {
     width: 100%;
     margin-left: 0;
+  }
+
+  .page-body {
     padding: 12px 16px;
   }
   
@@ -305,6 +321,9 @@ onUnmounted(() => {
   .main-content {
     width: 100%;
     margin-left: 0;
+  }
+
+  .page-body {
     padding: 10px 12px;
   }
   
@@ -313,14 +332,14 @@ onUnmounted(() => {
 
 /* 响应式设计：大屏桌面 (1201px - 1440px) */
 @media (min-width: 1201px) and (max-width: 1440px) {
-  .main-content {
+  .page-body {
     padding: 24px 40px;
   }
 }
 
 /* 响应式设计：超大屏桌面 (1441px - 1920px) */
 @media (min-width: 1441px) and (max-width: 1920px) {
-  .main-content {
+  .page-body {
     padding: 28px 60px;
   }
   
@@ -329,7 +348,7 @@ onUnmounted(() => {
 
 /* 响应式设计：4K及超高分辨率屏幕 (≥1921px) */
 @media (min-width: 1921px) {
-  .main-content {
+  .page-body {
     padding: 32px 80px;
     /* 移除这里的margin设置，由计算属性统一管理 */
   }

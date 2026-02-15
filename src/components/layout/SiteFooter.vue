@@ -103,7 +103,7 @@ const socialLinks = computed(() => {
   background: transparent;
   position: relative;
   margin-top: auto;
-  padding: 1rem 0 0.5rem;
+  padding: 1rem 0;
   color: #94A3B8;
   font-size: 0.75rem;
   transition: all 0.3s ease;

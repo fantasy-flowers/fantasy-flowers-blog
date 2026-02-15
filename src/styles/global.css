@@ -270,44 +270,39 @@ body::before {
 /* Main content area */
 .main-content {
     flex: 1;
-    padding: 2rem;
+    min-height: 100vh;
     width: 100%;
-    /* 使用全宽度 */
     margin: 0;
-    /* 移除自动居中 */
-    margin-left: 250px;
-    /* 为侧边栏留出空间 */
+    padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 /* 响应式设计：大屏桌面 (1201px - 1440px) */
 @media (min-width: 1201px) and (max-width: 1440px) {
-    .main-content {
+    .page-body {
         padding: 2rem 2.5rem;
-        margin-left: 250px;
     }
 }
 
 /* 响应式设计：超大屏桌面 (1441px - 1920px) */
 @media (min-width: 1441px) and (max-width: 1920px) {
-    .main-content {
+    .page-body {
         padding: 2.2rem 3rem;
-        margin-left: 250px;
     }
 }
 
 /* 响应式设计：2K显示器 (1921px - 2560px) */
 @media (min-width: 1921px) and (max-width: 2560px) {
-    .main-content {
+    .page-body {
         padding: 2.5rem 4rem;
-        margin-left: 250px;
     }
 }
 
 /* 4K Display optimization (2561px - 4000px) */
 @media (min-width: 2561px) and (max-width: 4000px) {
-    .main-content {
+    .page-body {
         padding: 3rem 5rem;
-        margin-left: 280px;
     }
 
     .shell {
@@ -317,18 +312,15 @@ body::before {
 
 /* 响应式设计：标准平板设备 (769px - 1024px) */
 @media (max-width: 1024px) and (min-width: 769px) {
-    .main-content {
+    .page-body {
         padding: 1.8rem 2rem;
-        margin-left: 250px;
     }
 }
 
 /* 响应式设计：小型平板 (481px - 768px) */
 @media (max-width: 768px) and (min-width: 481px) {
-    .main-content {
-        margin-left: 0;
+    .page-body {
         padding: 1.5rem 1.8rem;
-        width: 100%;
     }
 
     .shell {
@@ -342,10 +334,8 @@ body::before {
 
 /* 响应式设计：标准手机 (321px - 480px) */
 @media (max-width: 480px) and (min-width: 321px) {
-    .main-content {
-        margin-left: 0;
+    .page-body {
         padding: 1.2rem 1.5rem;
-        width: 100%;
     }
 
     .shell {
@@ -359,10 +349,8 @@ body::before {
 
 /* 响应式设计：小屏手机 (≤320px) */
 @media (max-width: 320px) {
-    .main-content {
-        margin-left: 0;
+    .page-body {
         padding: 1rem 1.2rem;
-        width: 100%;
     }
 
     .shell {
@@ -376,9 +364,8 @@ body::before {
 
 /* Ultra-wide screen optimization (≥4001px) */
 @media (min-width: 4001px) {
-    .main-content {
+    .page-body {
         padding: 3.5rem 6rem;
-        margin-left: 320px;
     }
 
     .shell {
