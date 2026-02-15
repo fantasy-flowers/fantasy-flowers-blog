@@ -2,9 +2,7 @@
   <div class="home-container">
     <header class="header">
       <h1 class="header-title text-gradient">fantasy_flowers's Blog</h1>
-      <p class="header-subtitle" :class="{ 'poem-loaded': poemLoaded }">
-        {{ poemLoaded ? `${poem.content}——${poem.author}` : '正在加载诗词...' }}
-      </p>
+      <PoemDisplay />
     </header>
     
     <div class="home-content">
@@ -54,32 +52,15 @@
 
 import { onMounted, computed, ref, defineAsyncComponent, watch } from 'vue'
 import PostCard from '@/components/business/PostCard.vue'
+import PoemDisplay from './components/PoemDisplay.vue'
 import CategorySidebar from './components/CategorySidebar.vue'
 import LoadingSpinner from '@/components/base/LoadingSpinner.vue'
 import Pagination from '@/components/base/Pagination.vue'
 import ListTransition from '@/components/animations/ListTransition.vue'
 import { useBlogStore } from '@/stores/modules/blog'
 import { setPageMetadata } from '@/utils/metadata'
-import { poemAPI } from '@/api'
 
 const blogStore = useBlogStore()
-
-// 随机诗词功能
-const poem = ref({ content: '', author: '' })
-const poemLoaded = ref(false)
-
-// 从poem.json中随机获取一首诗词
-const fetchRandomPoem = async () => {
-  try {
-    const data = await poemAPI.getRandomPoem()
-    if (data) {
-      poem.value = data
-      poemLoaded.value = true
-    }
-  } catch (error) {
-    console.error('获取诗词失败:', error)
-  }
-}
 
 // 分页设置
 const currentPage = ref(1)
@@ -111,9 +92,6 @@ watch(() => blogStore.filteredPosts.length, () => {
 })
 
 onMounted(async () => {
-  // 获取随机诗词
-  fetchRandomPoem()
-  
   // 清除任何筛选条件
   blogStore.clearFilters()
   
@@ -206,21 +184,7 @@ onMounted(async () => {
   margin-bottom: 0.5rem;
 }
 
-.header-subtitle {
-  color: #94A3B8;
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  max-width: 600px;
-  margin: 0 auto;
-  transition: all 0.6s ease-in-out;
-}
 
-/* 诗词加载后的淡入和滑动动画 */
-.header-subtitle.poem-loaded {
-  animation: fadeInSlide 1.2s ease-in-out;
-  color: white;
-}
-
-/* @keyframes fadeInSlide 已移至全局 _keyframes.css */
 
 /* 内容区上滑动画 - 优化版本 */
 .home-content {
