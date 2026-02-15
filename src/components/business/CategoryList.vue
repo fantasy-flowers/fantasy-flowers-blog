@@ -33,7 +33,7 @@
       :class="{ active: selectedCategory === category.name }"
       @click="handleCategoryClick(category.name)"
     >
-      <i class="fa fa-folder-o"></i>
+      <i class="fa-regular fa-folder"></i>
       <span>{{ category.name }}</span>
       <span class="ml-auto text-xs">{{ category.count }}</span>
     </div>
