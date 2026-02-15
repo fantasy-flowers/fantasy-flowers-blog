@@ -340,8 +340,8 @@ export const useBlogStore = defineStore('blog', {
           this.fetchArticles({ page: 1, pageSize: 1000 }),
           this.fetchCategories(),
           this.fetchTags(),
-          this.fetchFriendLinks()
-          // fetchSystemConfig 已移除，配置在 main.js 中初始化
+          this.fetchFriendLinks(),
+          this.fetchSystemConfig()
         ])
       } catch (error) {
         console.error('初始化数据失败:', error)
@@ -412,11 +412,29 @@ export const useBlogStore = defineStore('blog', {
     },
 
     /**
-     * 获取系统配置 (已废弃，保留兼容性，但不再调用 API)
+     * 获取系统配置
      */
     async fetchSystemConfig() {
-      // 此方法不再需要主动调用后端 API，配置已在应用启动时加载
-      return this.systemConfig
+      try {
+        const config = await getSystemConfigs()
+        if (config) {
+          // 更新 state
+          this.systemConfig.site_name = config.site_name || this.systemConfig.site_name
+          this.systemConfig.site_description = config.site_description || this.systemConfig.site_description
+           this.systemConfig.github_link = config.github_link || this.systemConfig.github_link
+           this.systemConfig.icp_record = config.icp_record || ''
+           // 兼容旧的 beian_number 字段
+           this.systemConfig.beian_number = config.icp_record || this.systemConfig.beian_number || ''
+           
+           // 保存完整配置
+          this.systemConfig.fullConfig = config
+        }
+        return this.systemConfig
+      } catch (error) {
+        console.error('获取系统配置失败:', error)
+        // 失败时不覆盖默认值或已有值
+        return this.systemConfig
+      }
     },
 
     // 兼容旧方法

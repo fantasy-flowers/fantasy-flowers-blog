@@ -103,7 +103,7 @@ const socialLinks = computed(() => {
   background: transparent;
   position: relative;
   margin-top: auto;
-  padding: 1rem 0;
+  padding: 1rem 0 0.5rem;
   color: #94A3B8;
   font-size: 0.75rem;
   transition: all 0.3s ease;
@@ -123,7 +123,7 @@ const socialLinks = computed(() => {
 .footer-info {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.01rem;
   align-items: center;
 }
 

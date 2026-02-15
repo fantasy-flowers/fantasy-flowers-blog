@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "meta": {
     "siteName": "Vue Blog",
-    "beianNumber": "123456789",
+    "beianNumber": "666666666666",
     "legal": {
       "company": "My Company Ltd.",
       "address": "123 Tech Street, Silicon Valley",
@@ -11,7 +11,7 @@
   },
   "seo": {
     "titleTemplate": "%s - Vue Blog",
-    "defaultDescription": "A high performance blog system built with Vue 3 and Vite",
+    "defaultDescription": "xxxxxxx",
     "keywords": "vue3, vite, blog, pinia, tailwindcss"
   },
   "contact": {

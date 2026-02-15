@@ -5,7 +5,7 @@
       <SidebarHeader
         avatar-src="/head/head.webp"
         name="fantasy_flowers"
-        slogan="热爱生活，热爱编程"
+        :slogan="siteDescription"
         :collapsed="isCollapsed"
         @toggle="toggleSidebar"
       />
@@ -74,6 +74,8 @@ const sidebarStore = useSidebarStore()
 const isCollapsed = computed(() => sidebarStore.isCollapsed)
 const currentRouteName = computed(() => route.name || '')
 const githubLink = computed(() => blogStore.systemConfig?.github_link || 'https://github.com/')
+// const siteName = computed(() => blogStore.systemConfig?.site_name || 'fantasy_flowers') // 使用硬编码值
+const siteDescription = computed(() => blogStore.systemConfig?.site_description || '热爱生活，热爱编程')
 
 const { tooltipState, showTooltip, hideTooltip } = useTooltip({
   shouldShow: () => isCollapsed.value

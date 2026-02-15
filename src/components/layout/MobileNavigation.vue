@@ -15,7 +15,7 @@
       <div class="mobile-nav__profile">
         <img :src="avatarSrc" :alt="profileName" class="mobile-nav__avatar" />
         <h2 class="mobile-nav__name">{{ profileName }}</h2>
-        <p class="mobile-nav__slogan">{{ profileSlogan }}</p>
+        <p class="mobile-nav__slogan">{{ siteDescription }}</p>
       </div>
       <nav v-for="(group, idx) in navGroups" :key="idx"
         class="mobile-nav__section" :aria-label="group.title">
@@ -85,6 +85,8 @@ const toggleBtnRef = ref(null)
 const route = useRoute()
 const blogStore = useBlogStore()
 const { activate: activateTrap, deactivate: deactivateTrap } = useFocusTrap(sidebarRef)
+
+const siteDescription = computed(() => blogStore.systemConfig?.site_description || '热爱生活，热爱编程')
 
 /** @type {import('vue').ComputedRef<Array<{title: string, items: Array}>>} */
 const navGroups = computed(() => [
