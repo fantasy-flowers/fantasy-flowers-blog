@@ -337,7 +337,7 @@ export const useBlogStore = defineStore('blog', {
 
       try {
         await Promise.all([
-          this.fetchArticles({ page: 1, pageSize: 1000 }),
+          this.fetchArticles({ page: 1, pageSize: 100 }),
           this.fetchCategories(),
           this.fetchTags(),
           this.fetchFriendLinks(),
