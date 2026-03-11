@@ -13,7 +13,7 @@ export const BACKGROUNDS = [
     { id: 8, name: 'girl', filename: '8.webp' },
     { id: 9, name: '祥子', filename: '9.webp' },
     { id: 10, name: '雪乃', filename: '10.webp' },
-    { id: 11, name: '遐蝶', filename: '11.webp' },
+    { id: 11, name: '2233', filename: '11.webp' },
     { id: 12, name: '默认背景', filename: '12.webp' }
 ]
 
