@@ -135,7 +135,13 @@
         
         <div v-else class="text-center py-8 text-gray-400">
           <i class="fa fa-exclamation-circle text-4xl mb-4"></i>
-          <p>文章不存在或已被删除</p>
+          <p>文章不存在、未发布或已被删除</p>
+          <button 
+            @click="router.push('/')" 
+            class="mt-4 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition-colors"
+          >
+            返回首页
+          </button>
         </div>
         
         <div class="nav-buttons animated-card" style="animation-delay: 0.4s;" v-if="post">
@@ -335,6 +341,10 @@ const loadArticle = async (postId) => {
       })
     } catch (error) {
       console.error('加载文章失败:', error)
+      // 如果是404错误，清空当前文章
+      if (error.response?.status === 404) {
+        blogStore.currentPost = null
+      }
     }
   }
 }
