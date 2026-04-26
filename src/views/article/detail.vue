@@ -316,35 +316,31 @@ const updateMetadata = () => {
 
 // 加载文章数据
 const loadArticle = async (postId) => {
-  if (postId) {
-    // 检查是否已有该文章且有内容
-    const existingPost = blogStore.getPostById(postId)
-    if (existingPost && existingPost.content) {
-      // 如果已有内容，直接使用（更新 currentPost）
-      if (!blogStore.currentPost || blogStore.currentPost.id !== existingPost.id) {
-        blogStore.currentPost = existingPost
-      }
-      updateMetadata()
-      nextTick(() => {
-        updateActiveHeading()
-      })
-      return
-    }
+  if (!postId) return
 
-    // 否则从后端获取
-    try {
-      await blogStore.fetchArticleDetail(postId)
-      updateMetadata()
-      // 内容加载后更新目录高亮
-      nextTick(() => {
-        updateActiveHeading()
-      })
-    } catch (error) {
-      console.error('加载文章失败:', error)
-      // 如果是404错误，清空当前文章
-      if (error.response?.status === 404) {
-        blogStore.currentPost = null
-      }
+  // 先用本地缓存回填，减少内容闪烁；但仍会继续请求后端详情
+  const existingPost = blogStore.getPostById(postId)
+  if (existingPost && existingPost.content) {
+    blogStore.currentPost = existingPost
+    updateMetadata()
+    nextTick(() => {
+      updateActiveHeading()
+    })
+  }
+
+  // 每次进入详情页都请求后端，确保阅读量按点击次数累加
+  try {
+    await blogStore.fetchArticleDetail(postId)
+    updateMetadata()
+    // 内容加载后更新目录高亮
+    nextTick(() => {
+      updateActiveHeading()
+    })
+  } catch (error) {
+    console.error('加载文章失败:', error)
+    // 如果是404错误，清空当前文章
+    if (error.response?.status === 404) {
+      blogStore.currentPost = null
     }
   }
 }
