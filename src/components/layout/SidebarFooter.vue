@@ -186,13 +186,11 @@ const handleMouseEnter = (event, text) => {
 .sidebar-footer__link:hover { background-color: rgba(59, 130, 246, 0.2); }
 .sidebar-footer__link:hover .sidebar-footer__text { color: #F8FAFC; }
 .sidebar-footer__link--active { background-color: rgba(59, 130, 246, 0.3); color: #93C5FD; font-weight: 600; }
-.sidebar-footer__link--collapsed { justify-content: center; padding: 0; margin: 0; }
 
 .sidebar-footer__icon-wrapper {
   min-width: 60px; height: 100%; display: flex; align-items: center;
   justify-content: center; border-radius: 6px; position: relative;
 }
-.sidebar-footer__link--collapsed .sidebar-footer__icon-wrapper { min-width: 100%; margin: 0; }
 
 .sidebar-footer__icon-img { width: 28px; height: 28px; object-fit: contain; position: absolute; transition: opacity 0.3s ease, transform 0.3s ease; }
 .sidebar-footer__icon-img--default { opacity: 1; transform: scale(1); }
@@ -201,18 +199,16 @@ const handleMouseEnter = (event, text) => {
 .sidebar-footer__link:hover .sidebar-footer__icon-img--hover { opacity: 1; transform: scale(1); }
 
 .sidebar-footer__text { font-size: 17px; font-weight: 500; white-space: nowrap; color: #E2E8F0; opacity: 1; transition: opacity 0.3s ease, transform 0.3s ease; }
-.sidebar-footer__text--hidden { display: none; }
+.sidebar-footer__text--hidden { opacity: 0; pointer-events: none; }
 
 .sidebar-footer__external-icon { font-size: 0.75rem; opacity: 0.7; margin-left: auto; color: #E2E8F0; transition: all 0.3s ease; }
-.sidebar-footer__external-icon--hidden { display: none; }
+.sidebar-footer__external-icon--hidden { opacity: 0; pointer-events: none; }
 .sidebar-footer__link:hover .sidebar-footer__external-icon { opacity: 1; transform: translateX(2px); }
 
 @media (max-width: 768px) {
   .sidebar-footer__section-title--hidden { opacity: 1; transform: translateX(0); height: auto; margin: 0 20px 12px; padding-bottom: 4px; }
-  .sidebar-footer__text--hidden { display: inline; }
-  .sidebar-footer__external-icon--hidden { display: inline; }
-  .sidebar-footer__link--collapsed { justify-content: flex-start; padding: 0; }
-  .sidebar-footer__link--collapsed .sidebar-footer__icon-wrapper { min-width: 60px; }
+  .sidebar-footer__text--hidden { opacity: 1; pointer-events: auto; }
+  .sidebar-footer__external-icon--hidden { opacity: 0.7; pointer-events: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {

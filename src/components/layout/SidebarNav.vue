@@ -250,13 +250,11 @@ const handleMouseEnter = (event, text) => {
 .sidebar-nav__link:hover .sidebar-nav__icon-fa,
 .sidebar-nav__link:hover .sidebar-nav__text { color: #F8FAFC; }
 .sidebar-nav__link--active { background-color: rgba(59, 130, 246, 0.3); color: #93C5FD; font-weight: 600; }
-.sidebar-nav__link--collapsed { justify-content: center; padding: 0; margin: 0; }
 
 .sidebar-nav__icon-wrapper {
   min-width: 60px; height: 100%; display: flex; align-items: center;
   justify-content: center; border-radius: 6px; position: relative;
 }
-.sidebar-nav__link--collapsed .sidebar-nav__icon-wrapper { min-width: 100%; margin: 0; }
 
 .sidebar-nav__icon-img { width: 28px; height: 28px; object-fit: contain; position: absolute; transition: opacity 0.3s ease, transform 0.3s ease; }
 .sidebar-nav__icon-img--default { opacity: 1; transform: scale(1); }
@@ -267,18 +265,16 @@ const handleMouseEnter = (event, text) => {
 .sidebar-nav__icon-fa { font-size: 23px; color: #E2E8F0; transition: all 0.3s ease; }
 
 .sidebar-nav__text { font-size: 17px; font-weight: 500; white-space: nowrap; color: #E2E8F0; opacity: 1; transition: opacity 0.3s ease, transform 0.3s ease; }
-.sidebar-nav__text--hidden { display: none; }
+.sidebar-nav__text--hidden { opacity: 0; pointer-events: none; }
 
 .sidebar-nav__external-icon { font-size: 0.75rem; opacity: 0.7; margin-left: auto; color: #E2E8F0; transition: all 0.3s ease; }
-.sidebar-nav__external-icon--hidden { display: none; }
+.sidebar-nav__external-icon--hidden { opacity: 0; pointer-events: none; }
 .sidebar-nav__link:hover .sidebar-nav__external-icon { opacity: 1; transform: translateX(2px); }
 
 @media (max-width: 768px) {
   .sidebar-nav__section-title--hidden { opacity: 1; transform: translateX(0); height: auto; margin: 0 20px 8px; padding-bottom: 4px; }
-  .sidebar-nav__text--hidden { display: inline; }
-  .sidebar-nav__external-icon--hidden { display: inline; }
-  .sidebar-nav__link--collapsed { justify-content: flex-start; padding: 0; }
-  .sidebar-nav__link--collapsed .sidebar-nav__icon-wrapper { min-width: 60px; }
+  .sidebar-nav__text--hidden { opacity: 1; pointer-events: auto; }
+  .sidebar-nav__external-icon--hidden { opacity: 0.7; pointer-events: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
