@@ -650,10 +650,18 @@ watch(post, () => {
   margin: 1.5rem 0 2rem;
 }
 
-/* 正文内容 */
+/* ===== 文章内容样式 ===== */
 .article-content {
   color: #E2E8F0;
   line-height: 1.8;
+}
+
+article {
+  
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgb(198, 33, 96);
 }
 
 /* ===== 移动端样式 ===== */
@@ -717,9 +725,7 @@ watch(post, () => {
   }
 }
 
-/* ===== 响应式设计 ===== */
-
-/* 平板设备 */
+/* 响应式设计：平板设备 */
 @media (max-width: 1024px) {
   .article-sidebar {
     width: 22%;
@@ -735,7 +741,7 @@ watch(post, () => {
   }
 }
 
-/* 移动设备 */
+/* 响应式设计：移动设备 */
 @media (max-width: 768px) {
   .article-page-container {
     flex-direction: column;
@@ -798,26 +804,7 @@ watch(post, () => {
   }
 }
 
-/* 大屏幕 */
-@media (min-width: 1920px) {
-  .article-sidebar {
-    flex: 0 0 18%;
-  }
-  
-  .article-title {
-    font-size: 2.25rem;
-  }
-}
-
-article {
-  background-color: rgba(30, 54, 98, 0.45);
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* 响应式设计：标准手机设备 (321px - 480px) */
+/* ===== 响应式设计：标准手机设备 (321px - 480px) */
 @media (max-width: 480px) and (min-width: 321px) {
   article {
     padding: 16px;
