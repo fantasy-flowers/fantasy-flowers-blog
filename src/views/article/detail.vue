@@ -14,15 +14,6 @@
           <!-- 左侧栏: 封面 + 目录 -->
           <aside class="article-sidebar" :class="{ 'mobile-open': mobileMenuOpen }">
             <!-- 封面图 -->
-            <!-- <div class="sidebar-cover">
-            <img
-              :src="'http://random.MoeJue.cn/randbg?type=302&style=3'" 
-              :alt="post.title"
-              class="cover-image"
-              loading="lazy"
-            />
-            </div> -->
-
             <div class="sidebar-cover">
               <img 
                 v-if="post.cover_image || post.image"
