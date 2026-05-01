@@ -38,8 +38,8 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const isHovered = ref(false)
-const defaultImage = '/public/icon/404-article.png'
-const hoverImage = '/public/icon/404-article-hover.png'
+const defaultImage = '/icon/404-article.png'
+const hoverImage = '/icon/404-article-hover.png'
 const defaultText = '杂~~~鱼~♡杂鱼~♡ 臭杂鱼♡ 页面不见了 ~ 是不是被你吃了?!'
 const hoverText = '杂鱼~♡杂鱼~♡ 臭杂鱼♡'
 

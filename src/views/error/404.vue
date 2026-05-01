@@ -40,8 +40,8 @@ import { setPageMetadata } from '@/utils/metadata'
 const router = useRouter()
 
 const isHovered = ref(false)
-const defaultImage = '/public/icon/404.png'
-const hoverImage = '/public/icon/404-hover.png'
+const defaultImage = '/icon/404.png'
+const hoverImage = '/icon/404-hover.png'
 const defaultText = '为——什——么——要——打——开——这——个——页——面——？！！'
 const hoverText = '你这个人——怎么永远都想着自己啊！？'
 
