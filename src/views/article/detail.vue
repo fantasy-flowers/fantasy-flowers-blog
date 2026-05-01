@@ -109,7 +109,7 @@
                 </span>
                 <span class="meta-item">
                   <i class="fa fa-edit"></i>
-                  {{ post.updated_at ? `重新编辑于${formatDateTime(post.updated_at)}` : '编辑于---' }}
+                  {{ post.updated_at ? `最后编辑于${formatDateTime(post.updated_at)}` : '编辑于---' }}
                 </span>
               </div>
             </header>
