@@ -124,16 +124,7 @@
           </main>
         </div>
         
-        <div v-else class="text-center py-8 text-gray-400">
-          <i class="fa fa-exclamation-circle text-4xl mb-4"></i>
-          <p>文章不存在、未发布或已被删除</p>
-          <button 
-            @click="router.push('/')" 
-            class="mt-4 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition-colors"
-          >
-            返回首页
-          </button>
-        </div>
+        <ArticleNotFound v-else />
         
         <div class="nav-buttons animated-card" style="animation-delay: 0.4s;" v-if="post">
           <button 
@@ -173,6 +164,7 @@ import LoadingSpinner from '@/components/base/LoadingSpinner.vue'
 import NavigationControls from '@/components/base/NavigationControls.vue'
 import SlideTransition from '@/components/animations/SlideTransition.vue'
 import FadeTransition from '@/components/animations/FadeTransition.vue'
+import ArticleNotFound from './ArticleNotFound.vue'
 
 const route = useRoute()
 const router = useRouter()
