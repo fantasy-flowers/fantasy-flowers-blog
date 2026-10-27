@@ -12,7 +12,6 @@
     "blog",
     "pinia",
     "vue-router",
-    "tailwindcss",
     "performance-optimization"
   ],
   "repository": {
@@ -24,7 +23,7 @@
   },
   "homepage": "https://github.com/yourusername/vue-blog#readme",
   "engines": {
-    "node": ">=16.0.0",
+    "node": ">=20.0.0",
     "npm": ">=8.0.0"
   },
   "scripts": {
@@ -40,6 +39,9 @@
     "# ===== 代码质量 Code Quality =====": "",
     "format": "prettier --write \"src/**/*.{js,vue,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{js,vue,css,md}\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
     "# ===== 资源优化 Asset Optimization =====": "",
     "images:generate": "node scripts/generateImages.js",
     "images:optimize": "node scripts/optimizeImages.js",
@@ -54,34 +56,25 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
-    "@unhead/vue": "^2.0.19",
     "axios": "^1.13.5",
     "dompurify": "^3.3.1",
-    "element-plus": "^2.13.2",
     "highlight.js": "^11.11.1",
-    "katex": "^0.16.27",
     "markdown-it": "^14.1.0",
-    "markdown-it-anchor": "^9.2.0",
-    "markdown-it-katex": "^2.0.3",
-    "markdown-it-table-of-contents": "^1.1.0",
     "markdown-it-task-lists": "^2.1.1",
     "pinia": "^2.1.6",
-    "unplugin-auto-import": "^21.0.0",
-    "unplugin-vue-components": "^31.0.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.16",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
     "ajv": "^8.17.1",
-    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-plugin-vue": "^9.33.0",
     "happy-dom": "^20.6.1",
     "jsdom": "^28.0.0",
     "postcss": "^8.5.6",
     "sharp": "^0.34.5",
-    "tailwindcss": "^4.1.16",
     "terser": "^5.44.1",
     "undici": "^7.21.0",
     "vite": "^6.0.0",

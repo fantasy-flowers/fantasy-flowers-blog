@@ -135,8 +135,9 @@ const updateMetadata = () => {
 // 加载文章数据
 const ensureDataLoaded = async () => {
   // 如果文章列表为空且未在加载中，则加载数据
-  if (blogStore.posts.length === 0 && !blogStore.postsLoading) {
-    await blogStore.initializeData()
+  // D2：标签页与分类页同属分类加载场景，使用独立的 categoryLoading 判断
+  if (blogStore.posts.length === 0 && !blogStore.categoryLoading) {
+    await blogStore.fetchCategoryArticles()
   }
 }
 

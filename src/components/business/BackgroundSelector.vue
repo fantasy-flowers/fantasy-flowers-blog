@@ -31,9 +31,8 @@
  * @example
  * <BackgroundSelector @error="handleError" />
  */
-import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { smartPreloader } from '@/utils/imageOptimizer'
-import { BACKGROUNDS, DEFAULT_BACKGROUND, getBackgroundUrl } from '@/constants/backgrounds'
+import { ref, watch, onMounted } from 'vue'
+import { BACKGROUNDS, DEFAULT_BACKGROUND } from '@/constants/backgrounds'
 import { useBackgroundSettings } from '@/composables/useBackgroundSettings'
 import BackgroundGrid from './BackgroundGrid.vue'
 import BackgroundPreview from './BackgroundPreview.vue'
@@ -94,14 +93,7 @@ defineExpose({ optimizedLoadThumbnails, initializeBackground })
 
 onMounted(async () => {
   await initializeBackground()
-  setTimeout(() => {
-    const imageNames = backgroundImages.map(img => getBackgroundUrl(img.filename))
-    const simpleLoader = { loadImage: (url) => Promise.resolve(url) }
-    try { smartPreloader.preloadPredicted(simpleLoader, imageNames) } catch (e) { /* ignore */ }
-  }, 3000)
 })
-
-onUnmounted(() => { smartPreloader.clearHoverTimers() })
 </script>
 
 <style scoped>

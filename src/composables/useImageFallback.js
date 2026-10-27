@@ -5,10 +5,10 @@
  * 提供图片加载的多级回退逻辑：
  * 主图片 → 备用图片 → SVG 占位符 → CSS 渐变
  *
- * 供 EntryAvatar、LazyImage 等组件复用。
+ * 供 EntryAvatar 等组件复用。
  */
 
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 
 /** 默认 SVG 占位符（圆形渐变） */
 const DEFAULT_SVG_PLACEHOLDER =

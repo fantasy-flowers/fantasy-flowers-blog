@@ -6,7 +6,7 @@
         <!-- 返回导航按钮 -->
         <NavigationControls />
         
-        <div v-if="blogStore.postsLoading" class="loading-state">
+        <div v-if="blogStore.detailLoading" class="loading-state">
           <LoadingSpinner text="加载中..." />
         </div>
         
@@ -177,7 +177,17 @@ const mobileMenuOpen = ref(false)
 const activeHeading = ref('')
 const articleContent = ref(null)
 
-const post = computed(() => blogStore.currentPost || blogStore.getPostById(parseInt(route.params.id)))
+// D3：文章数据与路由参数强绑定，只有 id 一致才允许渲染，杜绝切换文章时的「串页」
+const post = computed(() => {
+  const routeId = parseInt(route.params.id)
+  if (!routeId) return null
+  const current = blogStore.currentPost
+  if (current && parseInt(current.id) === routeId) return current
+  const cached = blogStore.getPostById(routeId)
+  // 列表缓存条目可能不含正文：内容缺失时视为未就绪，交由详情加载态处理
+  if (cached && cached.content) return cached
+  return null
+})
 const prevPost = computed(() => blogStore.getPrevPost(parseInt(route.params.id)))
 const nextPost = computed(() => blogStore.getNextPost(parseInt(route.params.id)))
 
@@ -321,8 +331,8 @@ const loadArticle = async (postId) => {
     })
   } catch (error) {
     console.error('加载文章失败:', error)
-    // 如果是404错误，清空当前文章
-    if (error.response?.status === 404) {
+    // 如果是404错误，清空当前文章（C2：兼容统一错误对象的 status 与原始 axios response）
+    if (error.status === 404 || error.response?.status === 404) {
       blogStore.currentPost = null
     }
   }

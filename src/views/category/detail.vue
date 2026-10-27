@@ -136,8 +136,9 @@ const updateMetadata = () => {
 const ensureDataLoaded = async () => {
   // 如果文章列表为空且未在加载中，则加载数据
   // App.vue 应该已经加载了数据，这里作为兜底
-  if (blogStore.posts.length === 0 && !blogStore.postsLoading) {
-    await blogStore.initializeData()
+  // D2：分类场景使用独立的 categoryLoading 判断，避免与列表/详情加载态串扰
+  if (blogStore.posts.length === 0 && !blogStore.categoryLoading) {
+    await blogStore.fetchCategoryArticles()
   }
 }
 

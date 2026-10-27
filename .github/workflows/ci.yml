@@ -1,0 +1,84 @@
+# vue-blog CI：构建 + 测试 + lint + 单 chunk 体积预算
+#
+# 体积预算说明：
+#   - 对 dist/assets 下每个 JS chunk 检查其 gzip 体积，默认上限 150KB（可用 CHUNK_BUDGET_KB 环境变量调整）。
+#   - 压缩产物容错：当前构建只产出 .gz（A7 已精简掉 brotli）。脚本优先查 .gz；
+#     没有 .gz 时回退查 .br；两者都没有则跳过该 chunk 的预算检查（只打印 SKIP）。
+#   - 白名单：highlight-* chunk 免检。highlight.js 全量语言包 gzip 约 307KB，是文章代码高亮的既有
+#     渲染行为；按语言裁剪会改变未收录语言的渲染结果，违反零视觉变更铁律，故整包保留、预算免检。
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test-lint:
+    name: Build, Test, Lint & Chunk Budget
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Check chunk size budget
+        env:
+          CHUNK_BUDGET_KB: "150"
+        run: |
+          set -u
+          budget_bytes=$(( ${CHUNK_BUDGET_KB:-150} * 1024 ))
+          failed=0
+          echo "Chunk size budget: gzip <= ${CHUNK_BUDGET_KB:-150}KB per chunk"
+          # 遍历构建产物里的每个 JS chunk（不含 .gz/.br 压缩副本本身）。
+          # 注意 vite.config.js 中 chunkFileNames/entryFileNames 指向 assets/js/ 子目录。
+          for js in dist/assets/js/*.js; do
+            [ -e "$js" ] || continue
+            # 白名单：highlight.js 全量语言包（约 307KB gz，行为保持必需）不参与预算
+            case "$(basename "$js")" in
+              highlight-*)
+                echo "SKIP (vendor allowlist)  $(basename "$js")"
+                continue
+                ;;
+            esac
+            gz=""
+            # 优先 .gz（当前双份压缩产物的主格式）；Batch 2 精简后只剩 .br 时回退到 .br；
+            # 两者都不存在（未来压缩插件变更）则跳过预算检查，不阻断 CI。
+            if [ -f "$js.gz" ]; then
+              gz="$js.gz"
+            elif [ -f "$js.br" ]; then
+              gz="$js.br"
+            fi
+            if [ -z "$gz" ]; then
+              echo "SKIP (no .gz/.br)  $(basename "$js")"
+              continue
+            fi
+            size=$(wc -c < "$gz" | tr -d ' ')
+            printf "%7d KB  %s\n" $(( size / 1024 )) "$(basename "$gz")"
+            if [ "$size" -gt "$budget_bytes" ]; then
+              echo "::error::$(basename "$gz") = ${size} bytes exceeds budget ${budget_bytes} bytes (${CHUNK_BUDGET_KB:-150}KB)"
+              failed=1
+            fi
+          done
+          exit $failed

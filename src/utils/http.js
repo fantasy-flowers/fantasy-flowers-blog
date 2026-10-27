@@ -12,6 +12,31 @@ export const TOKEN_KEY = 'blog_token'
 export const REQUEST_TIMEOUT = 10000
 
 /**
+ * 统一错误对象：code/message/status 三要素
+ * code 为业务码或网络错误码（TIMEOUT/NETWORK_ERROR），status 为 HTTP 状态码
+ */
+export class ApiError extends Error {
+  constructor(code, message, status) {
+    super(message)
+    this.name = 'ApiError'
+    this.code = code
+    this.message = message
+    this.status = status
+  }
+}
+
+/**
+ * 创建统一错误对象
+ * @param {string|number} code - 错误码
+ * @param {string} message - 错误提示
+ * @param {number|null} status - HTTP 状态码
+ * @returns {ApiError}
+ */
+export function createApiError(code, message, status = null) {
+  return new ApiError(code, message, status)
+}
+
+/**
  * 获取存储的 Token
  */
 export function getToken() {
@@ -69,24 +94,28 @@ http.interceptors.response.use(
     if (data.code === 200 || data.code === 201) {
       return data.data
     } else {
-      // 业务错误
+      // 业务错误：统一为 code/message/status 错误对象
       const message = data.message || '请求失败'
       console.error(message)
-      
+
       // 特殊状态码处理
       if (data.code === 401) {
         localStorage.removeItem(TOKEN_KEY)
         // 可以在这里处理路由跳转
         // window.location.href = '/login'
       }
-      
-      return Promise.reject(new Error(message))
+
+      return Promise.reject(createApiError(data.code, message, response.status))
     }
   },
   (error) => {
     let message = '网络请求失败'
-    
+    let code = 'NETWORK_ERROR'
+    let status = null
+
     if (error.response) {
+      status = error.response.status
+      code = status
       switch (error.response.status) {
         case 401:
           message = '未授权，请重新登录'
@@ -106,12 +135,17 @@ http.interceptors.response.use(
       }
     } else if (error.code === 'ECONNABORTED') {
       message = '请求超时'
-    } else if (error.message.includes('Network Error')) {
+      code = 'TIMEOUT'
+    } else if (error.message && error.message.includes('Network Error')) {
       message = '网络连接异常'
     }
 
     console.error(message)
-    return Promise.reject(error)
+    const apiError = createApiError(code, message, status)
+    // 向后兼容：保留原始 response/config 引用，便于按 HTTP 状态码判断
+    apiError.response = error.response
+    apiError.config = error.config
+    return Promise.reject(apiError)
   }
 )
 

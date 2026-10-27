@@ -1,0 +1,11 @@
+# ===== 构建产物与依赖 =====
+dist/
+node_modules/
+public/
+
+# ===== 脚本与文档（不参与 lint） =====
+scripts/
+docs/
+
+# ===== 压缩/最小化产物 =====
+*.min.js

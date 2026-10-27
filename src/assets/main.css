@@ -1,7 +1,4 @@
 @import '@/styles/animations/_keyframes.css';
 @import '@/styles/variables.css';
 @import '@/styles/global.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import '@/styles/tailwind-frozen.css';

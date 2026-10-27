@@ -22,7 +22,9 @@ node_modules
 # Build Output
 dist
 dist-ssr
+dist.zip
 *.local
+.review-dist
 
 # 日志文件
 # Log Files

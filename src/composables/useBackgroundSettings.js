@@ -5,7 +5,7 @@
  * 遵循组件化开发原则，将存储逻辑与UI展示逻辑分离
  */
 
-import { ref, readonly, watch } from 'vue'
+import { ref, readonly } from 'vue'
 import { DEFAULT_BACKGROUND, getBackgroundUrl } from '@/constants/backgrounds'
 
 // ==================== 存储键常量 ====================

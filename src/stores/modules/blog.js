@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { articleAPI, categoryAPI, tagAPI, friendLinkAPI, pageAPI } from '@/api'
+import { articleAPI, categoryAPI, tagAPI, friendLinkAPI, pageAPI, createApiError } from '@/api'
 import { getSystemConfigs } from '@/api/modules/systemConfig'
 
 export const useBlogStore = defineStore('blog', {
@@ -11,6 +11,10 @@ export const useBlogStore = defineStore('blog', {
     postsPage: 1,
     postsPageSize: 10,
     postsLoading: false,
+    // 详情场景独立加载态（D2：与列表/分类加载隔离）
+    detailLoading: false,
+    // 分类/标签页兜底加载独立加载态（D2：与列表/详情隔离）
+    categoryLoading: false,
 
     // 分类相关
     categories: [],
@@ -176,11 +180,18 @@ export const useBlogStore = defineStore('blog', {
      * 获取文章详情
      */
     async fetchArticleDetail(id) {
-      this.postsLoading = true
+      this.detailLoading = true
       this.error = null
 
       try {
         const article = await articleAPI.getArticleDetail(id)
+
+        // D3：详情与路由参数强绑定——返回数据 id 与请求 id 不一致时视为失败，
+        // 避免把上一篇的文章内容渲染到当前路由下（串页）
+        if (parseInt(article?.id) !== parseInt(id)) {
+          throw createApiError('ARTICLE_ID_MISMATCH', '文章数据与请求不匹配', null)
+        }
+
         this.currentPost = article
 
         // 更新列表中的文章（如果存在）
@@ -195,7 +206,24 @@ export const useBlogStore = defineStore('blog', {
         console.error('获取文章详情失败:', error)
         throw error
       } finally {
-        this.postsLoading = false
+        this.detailLoading = false
+      }
+    },
+
+    /**
+     * 分类/标签页兜底加载（D2）：与列表共享数据源，但用独立的 categoryLoading 隔离，
+     * 避免详情/列表加载态串扰到分类页的加载判断
+     */
+    async fetchCategoryArticles() {
+      if (this.posts.length > 0 || this.categoryLoading) {
+        return
+      }
+
+      this.categoryLoading = true
+      try {
+        await this.initializeData()
+      } finally {
+        this.categoryLoading = false
       }
     },
 
@@ -445,7 +473,7 @@ export const useBlogStore = defineStore('blog', {
       }
     },
 
-    likePost(postId) {
+    likePost() {
       // 后端暂未实现点赞功能
       console.log('点赞功能待实现')
     }

@@ -2,8 +2,9 @@
  * 图片 URL 处理工具
  */
 
-// 获取 API 基础 URL（去掉 /api/ 后缀）
-const API_BASE = import.meta.env.VITE_API_BASE_URL?.replace('/api/', '') || 'http://localhost:3000'
+// 静态资源基址：独立于接口地址，dev/prod 由 VITE_STATIC_BASE_URL 统一注入（无尾斜杠策略）
+// 统一去掉尾斜杠，避免 dev/prod 环境值写法不一致导致拼接出不同路径
+export const STATIC_BASE_URL = (import.meta.env.VITE_STATIC_BASE_URL || 'http://localhost:3000').replace(/\/+$/, '')
 
 // 缓存版本控制（当图片更新时，通过修改版本号强制刷新缓存）
 const CACHE_VERSION = import.meta.env.VITE_IMAGE_CACHE_VERSION || 'v1'
@@ -42,11 +43,11 @@ export function getImageUrl(path) {
 
   // 如果是相对路径，拼接完整 URL 并添加版本号
   if (path.startsWith('/')) {
-    return addCacheVersion(`${API_BASE}${path}`)
+    return addCacheVersion(`${STATIC_BASE_URL}${path}`)
   }
 
   // 其他情况，添加前缀斜杠并添加版本号
-  return addCacheVersion(`${API_BASE}/${path}`)
+  return addCacheVersion(`${STATIC_BASE_URL}/${path}`)
 }
 
 /**
@@ -55,7 +56,7 @@ export function getImageUrl(path) {
  * @param {string} size - 尺寸 (small/medium/large)
  * @returns {string} 缩略图 URL
  */
-export function getThumbnailUrl(path, size = 'medium') {
+export function getThumbnailUrl(path) {
   if (!path) return ''
 
   const fullUrl = getImageUrl(path)

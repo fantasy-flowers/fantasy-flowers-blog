@@ -6,14 +6,14 @@
       <span class="sidebar-header__avatar">
         <img
           :src="avatarSrc"
-          alt="Profile Avatar"
+          :alt="`${name} avatar`"
           class="sidebar-header__avatar-img"
         >
       </span>
       <!-- 标题文本区域 -->
       <div
         class="sidebar-header__info"
-        :class="{ 'sidebar-header__info--hidden': collapsed }"
+        :class="{ 'sidebar-header__text--hidden': collapsed }"
       >
         <span class="sidebar-header__name">{{ name }}</span>
         <span class="sidebar-header__slogan">{{ slogan }}</span>
@@ -26,6 +26,7 @@
       role="button"
       tabindex="0"
       :aria-label="collapsed ? '展开侧边栏' : '收起侧边栏'"
+      :aria-expanded="String(!collapsed)"
       @click="$emit('toggle')"
       @keydown.enter.prevent="$emit('toggle')"
       @keydown.space.prevent="$emit('toggle')"
@@ -59,7 +60,7 @@ defineProps({
    */
   avatarSrc: {
     type: String,
-    default: ''
+    default: '/head/head.webp'
   },
   /**
    * 用户名称
@@ -67,7 +68,7 @@ defineProps({
    */
   name: {
     type: String,
-    default: ''
+    default: 'fantasy_flowers'
   },
   /**
    * 用户标语/口号
@@ -75,7 +76,7 @@ defineProps({
    */
   slogan: {
     type: String,
-    default: ''
+    default: '热爱生活，热爱编程'
   },
   /**
    * 侧边栏是否处于折叠状态
@@ -139,7 +140,7 @@ defineEmits({
   transition: opacity 0.3s ease, width 0.3s ease;
 }
 
-.sidebar-header__info--hidden {
+.sidebar-header__text--hidden {
   opacity: 0;
   width: 0;
   overflow: hidden;
@@ -219,7 +220,7 @@ defineEmits({
     right: -25px;
   }
 
-  .sidebar-header__info--hidden {
+  .sidebar-header__text--hidden {
     opacity: 1;
     width: auto;
     overflow: visible;

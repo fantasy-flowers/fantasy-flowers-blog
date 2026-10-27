@@ -35,24 +35,19 @@
       try {
         const hasEntered = sessionStorage.getItem(STORAGE_KEYS.HAS_ENTERED);
 
-        console.log('[EntryGate Pre-Init] Checking session state:', { hasEntered });
-
         if (hasEntered === 'true') {
           // User has already entered in this tab session (page refresh)
           sessionStorage.setItem(STORAGE_KEYS.SHOW_ENTRY, 'false');
-          console.log('[EntryGate Pre-Init] Refresh detected - entry gate will NOT show');
         } else {
           // First visit or new tab - show entry gate
           sessionStorage.setItem(STORAGE_KEYS.SHOW_ENTRY, 'true');
-          console.log('[EntryGate Pre-Init] First visit/new tab detected - entry gate WILL show');
         }
       } catch (error) {
-        console.error('[EntryGate Pre-Init] Error during session check:', error);
         // On error, default to showing entry gate for safety
         try {
           sessionStorage.setItem(STORAGE_KEYS.SHOW_ENTRY, 'true');
         } catch (e) {
-          console.error('[EntryGate Pre-Init] Failed to set default state:', e);
+          // sessionStorage unavailable - cannot persist default state
         }
       }
     })();

@@ -2,21 +2,26 @@
  * Markdown 渲染相关的工具函数
  */
 
+import { STATIC_BASE_URL } from './imageUrl';
+
 /**
  * 处理 Markdown 中的图片路径
  * @param {string} content - 原始 Markdown 内容
- * @param {string} baseUrl - 图片基础 URL
+ * @param {string} baseUrl - 图片基础 URL（为空时回落到 G4 的静态资源基址，修复正文相对图片 404）
  * @returns {string} 处理后的 Markdown 内容
  */
 export function processImagePaths(content, baseUrl = '') {
   if (!content) return '';
+
+  // 未显式传入基址时，统一使用静态资源基址（与 getImageUrl 同一变量）
+  const resolvedBase = baseUrl || STATIC_BASE_URL;
 
   // 处理相对路径的图片
   return content.replace(
     /!\[([^\]]*)\]\((?!https?:\/\/)([^)]+)\)/g,
     (match, alt, src) => {
       // 如果是相对路径，添加基础 URL
-      const fullUrl = src.startsWith('/') ? `${baseUrl}${src}` : `${baseUrl}/${src}`;
+      const fullUrl = src.startsWith('/') ? `${resolvedBase}${src}` : `${resolvedBase}/${src}`;
       return `![${alt}](${fullUrl})`;
     }
   );
