@@ -137,11 +137,11 @@ onMounted(async () => {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: bold;
   margin-bottom: 0.5rem;
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
 }
 
 .header-subtitle {
-  color: #94A3B8;
+  color: var(--blog-gray);
   font-size: clamp(1rem, 2vw, 1.2rem);
 }
 
@@ -152,7 +152,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
 }
 
 /* 分类容器动画 */
@@ -192,7 +192,7 @@ onMounted(async () => {
   justify-content: center;
   min-height: 50vh;
   padding: 4rem 2rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
 }
 
 .empty-state i {

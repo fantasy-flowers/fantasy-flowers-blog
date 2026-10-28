@@ -54,7 +54,7 @@ defineProps({
 /* Element: subtitle */
 .entry-title__subtitle {
   font-size: 1.1rem;
-  color: #94a3b8;
+  color: var(--blog-gray);
   font-weight: 400;
 }
 

@@ -124,9 +124,9 @@ onUnmounted(() => {
 }
 
 .background-toggle-btn {
-  background-color: rgba(30, 42, 58, 0.6);
+  background-color: var(--blog-bg-card);
   backdrop-filter: blur(10px); /* 保留用于关键控制按钮 */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   color: #E2E8F0;
   padding: 10px;
   border-radius: 50%;
@@ -145,7 +145,7 @@ onUnmounted(() => {
 
 .background-toggle-btn:hover {
   background-color: rgba(59, 130, 246, 0.2);
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   border-color: rgba(59, 130, 246, 0.3);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   transform: scale(1.1);
@@ -153,8 +153,8 @@ onUnmounted(() => {
 
 .background-toggle-btn:active {
   background-color: rgba(59, 130, 246, 0.3);
-  color: #93C5FD;
-  border-color: #3B82F6;
+  color: var(--blog-blue-light);
+  border-color: var(--blog-blue-strong);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   transform: scale(1.05);
 }
@@ -166,10 +166,10 @@ onUnmounted(() => {
   right: 0;
   margin-top: 10px;
   
-  background-color: rgba(30, 42, 58, 0.6);
+  background-color: var(--blog-bg-card);
   /* backdrop-filter removed for GPU optimization - only added when panel is open */
   border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
+  border-radius: var(--blog-radius-lg);
   padding: 15px;
   min-width: 240px;
   max-width: 260px; /* 添加最大宽度限制 */
@@ -187,7 +187,7 @@ onUnmounted(() => {
 .error-message {
   background-color: rgba(239, 68, 68, 0.2);
   border: 1px solid rgba(239, 68, 68, 0.4);
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   padding: 10px;
   margin-bottom: 15px;
   color: #FCA5A5;

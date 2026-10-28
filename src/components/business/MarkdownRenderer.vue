@@ -1,30 +1,10 @@
 <template>
-  <div class="markdown-content" v-html="renderedContent"></div>
+  <div class="markdown-content" v-html="renderedContent" @click="onClickContent"></div>
 </template>
 
 <script>
-import MarkdownIt from 'markdown-it';
-import DOMPurify from 'dompurify';
-import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css'; // 选择你喜欢的样式
-import taskLists from 'markdown-it-task-lists';
-import { processImagePaths } from '@/utils/markdownUtils';
-
-// 配置 Markdown 渲染器
-const md = new MarkdownIt({
-  html: true,        // 允许原始HTML
-  linkify: true,     // 自动转换URL
-  typographer: true, // 启用智能引号等
-  highlight: (str, lang) => {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return hljs.highlight(str, { language: lang }).value;
-      } catch (__) {}
-    }
-    return ''; // 使用默认代码块样式
-  }
-})
-.use(taskLists, { enabled: true }); // 启用任务列表
+import { renderMarkdown } from '@/utils/markdownRenderer';
 
 export default {
   name: 'MarkdownRenderer',
@@ -40,97 +20,45 @@ export default {
   },
   computed: {
     renderedContent() {
-      if (!this.content) return '';
-      
-      // 1. 处理图片路径
-      const processedContent = processImagePaths(this.content, this.baseUrl);
-      
-      // 2. Markdown 渲染
-      let html = md.render(processedContent);
-      
-      // 3. 安全净化（关键！防止XSS攻击）
-      html = DOMPurify.sanitize(html, {
-        ALLOWED_TAGS: [
-          'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 
-          'ul', 'ol', 'li', 'code', 'pre', 'a', 'img', 'table',
-          'thead', 'tbody', 'tr', 'th', 'td', 'strong', 'em', 'hr',
-          'br', 'div', 'span'
-        ],
-        ALLOWED_ATTR: ['href', 'src', 'alt', 'class', 'id', 'target', 'rel']
-      });
-      
-      // 4. 为标题添加ID（用于目录导航）
-      html = html.replace(/<(h[1-6])>(.+?)<\/h[1-6]>/gi, (match, tag, title) => {
-        const id = title
-          .replace(/<[^>]+>/g, '') // 移除HTML标签
-          .toLowerCase()
-          .replace(/[^\w\u4e00-\u9fa5\s-]/g, '') // 只保留字母、数字、中文、空格和连字符
-          .replace(/\s+/g, '-') // 空格替换为连字符
-          .replace(/-+/g, '-') // 多个连字符合并为一个
-          .replace(/^-|-$/g, ''); // 移除开头和结尾的连字符
-        return `<${tag} id="${id}">${title}</${tag}>`;
-      });
-      
-      // 5. 优化图片加载（懒加载）
-      html = html.replace(/<img/g, '<img loading="lazy"');
-      
-      // 6. 处理外部链接（在新窗口打开）
-      html = html.replace(/<a href="http/g, '<a target="_blank" rel="noopener noreferrer" href="http');
-      
-      return html;
+      return renderMarkdown(this.content, this.baseUrl);
     }
   },
   mounted() {
-    this.addCopyButtons();
     this.scrollToHash();
     window.addEventListener('hashchange', this.scrollToHash);
   },
   beforeUnmount() {
     window.removeEventListener('hashchange', this.scrollToHash);
   },
-  updated() {
-    // 内容更新后重新添加复制按钮
-    this.$nextTick(() => {
-      this.addCopyButtons();
-    });
-  },
   methods: {
-    addCopyButtons() {
-      // 移除已存在的复制按钮
-      document.querySelectorAll('.copy-button').forEach(btn => btn.remove());
-      
-      document.querySelectorAll('.markdown-content pre').forEach(preBlock => {
-        const button = document.createElement('button');
-        button.className = 'copy-button';
-        button.textContent = '复制';
-        
-        button.addEventListener('click', () => {
-          const code = preBlock.querySelector('code').innerText;
-          navigator.clipboard.writeText(code).then(() => {
-            button.textContent = '已复制';
-            setTimeout(() => button.textContent = '复制', 2000);
-          }).catch(() => {
-            // 降级方案
-            const textArea = document.createElement('textarea');
-            textArea.value = code;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            button.textContent = '已复制';
-            setTimeout(() => button.textContent = '复制', 2000);
-          });
-        });
-        
-        preBlock.style.position = 'relative';
-        preBlock.appendChild(button);
+    onClickContent(e) {
+      const button = e.target.closest('.copy-button');
+      if (!button) return;
+      const pre = button.closest('pre');
+      if (!pre) return;
+      const code = pre.querySelector('code');
+      if (!code) return;
+      const text = code.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        button.textContent = '已复制';
+        setTimeout(() => button.textContent = '复制', 2000);
+      }).catch(() => {
+        // 降级方案
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        button.textContent = '已复制';
+        setTimeout(() => button.textContent = '复制', 2000);
       });
     },
-    
+
     scrollToHash() {
       const hash = window.location.hash;
       if (hash) {
-        const element = document.querySelector(hash);
+        const element = document.getElementById(hash.slice(1));
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
@@ -206,8 +134,8 @@ export default {
 
 /* 引用样式 */
 .markdown-content :deep(blockquote) {
-  border-left: 4px solid #3b82f6;
-  background: rgba(30, 42, 58, 0.6);
+  border-left: 4px solid var(--blog-blue-strong);
+  background: var(--blog-bg-card);
   padding: 1rem 1.5rem;
   margin: 1.5rem 0;
   font-style: italic;
@@ -217,7 +145,7 @@ export default {
 /* 代码块样式 */
 .markdown-content :deep(pre) {
   background: #2d2d2d;
-  border-radius: 6px;
+  border-radius: var(--blog-radius-sm);
   padding: 15px;
   overflow-x: auto;
   margin: 20px 0;
@@ -226,7 +154,7 @@ export default {
 }
 
 .markdown-content :deep(code) {
-  background: rgba(30, 42, 58, 0.8);
+  background: var(--blog-bg-card-strong);
   padding: 2px 6px;
   border-radius: 3px;
   font-family: 'Courier New', monospace;
@@ -248,7 +176,7 @@ export default {
   background: #444;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--blog-radius-xs);
   padding: 5px 10px;
   cursor: pointer;
   font-size: 12px;
@@ -264,7 +192,7 @@ export default {
 .markdown-content :deep(img) {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   margin: 20px 0;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
@@ -282,14 +210,14 @@ export default {
 
 .markdown-content :deep(th),
 .markdown-content :deep(td) {
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--blog-border-strong);
   padding: 0.75rem;
   text-align: left;
   color: #ffffff;
 }
 
 .markdown-content :deep(th) {
-  background: rgba(30, 42, 58, 0.8);
+  background: var(--blog-bg-card-strong);
   font-weight: 600;
   color: #ffffff;
 }
@@ -300,21 +228,21 @@ export default {
 
 /* 链接样式 */
 .markdown-content :deep(a) {
-  color: #60a5fa;
+  color: var(--blog-blue);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s;
 }
 
 .markdown-content :deep(a:hover) {
-  border-bottom-color: #60a5fa;
-  color: #93c5fd;
+  border-bottom-color: var(--blog-blue);
+  color: var(--blog-blue-light);
 }
 
 /* 分割线样式 */
 .markdown-content :deep(hr) {
   border: none;
-  border-top: 2px solid rgba(255, 255, 255, 0.2);
+  border-top: 2px solid var(--blog-border-strong);
   margin: 2rem 0;
 }
 
@@ -330,7 +258,7 @@ export default {
   margin-right: 0.5rem;
   margin-left: 0;
   transform: scale(1.2);
-  accent-color: #60a5fa;
+  accent-color: var(--blog-blue);
 }
 
 .markdown-content :deep(.task-list-item-checkbox:checked + *) {

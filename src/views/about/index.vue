@@ -67,7 +67,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
 }
 
 /* 页面基础动画 */
@@ -121,9 +121,9 @@ onMounted(async () => {
 
 /* 关于页面内容样式 */
 .about-content {
-  background-color: rgba(30, 42, 58, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  background-color: var(--blog-bg-card);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-lg);
   padding: 2rem;
   margin: 2rem auto;
   max-width: 800px;
@@ -141,13 +141,13 @@ onMounted(async () => {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid var(--blog-border-strong);
   padding-bottom: 0.5rem;
   display: inline-block;
 }
 
 .no-content-message p {
-  color: #94A3B8;
+  color: var(--blog-gray);
   line-height: 1.8;
   margin-bottom: 1rem;
 }

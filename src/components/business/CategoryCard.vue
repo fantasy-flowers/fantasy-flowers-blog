@@ -43,10 +43,10 @@ const navigateToCategory = () => {
 
 <style scoped>
 .category-card {
-  background-color: rgba(30, 42, 58, 0.6);
+  background-color: var(--blog-bg-card);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-lg);
   padding: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -86,13 +86,13 @@ const navigateToCategory = () => {
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   transition: all 0.3s ease;
 }
 
 .category-card:hover .category-icon {
   background-color: rgba(59, 130, 246, 0.4);
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   transform: scale(1.1);
 }
 
@@ -104,7 +104,7 @@ const navigateToCategory = () => {
 .category-name {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   margin-bottom: 0.3rem;
   white-space: nowrap;
   overflow: hidden;
@@ -113,18 +113,18 @@ const navigateToCategory = () => {
 
 .category-count {
   font-size: 0.9rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
   margin: 0;
 }
 
 .category-arrow {
-  color: #94A3B8;
+  color: var(--blog-gray);
   font-size: 1rem;
   transition: all 0.3s ease;
 }
 
 .category-card:hover .category-arrow {
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   transform: translateX(4px);
 }
 

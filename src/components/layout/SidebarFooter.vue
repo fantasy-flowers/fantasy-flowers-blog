@@ -169,7 +169,7 @@ const handleMouseEnter = (event, text) => {
 .sidebar-footer { padding: 0; margin: 0; }
 
 .sidebar-footer__section-title {
-  color: #93C5FD; font-size: 14px; font-weight: 600;
+  color: var(--blog-blue-light); font-size: 14px; font-weight: 600;
   margin: 0 20px 12px; padding-bottom: 4px;
   border-bottom: 1px solid rgba(147, 197, 253, 0.2); transition: all 0.3s ease;
 }
@@ -180,16 +180,16 @@ const handleMouseEnter = (event, text) => {
 
 .sidebar-footer__link {
   display: flex; align-items: center; width: 100%; height: 100%;
-  border-radius: 6px; text-decoration: none; background-color: transparent;
+  border-radius: var(--blog-radius-sm); text-decoration: none; background-color: transparent;
   overflow: hidden; transition: all 0.3s ease; cursor: pointer; position: relative;
 }
 .sidebar-footer__link:hover { background-color: rgba(59, 130, 246, 0.2); }
-.sidebar-footer__link:hover .sidebar-footer__text { color: #F8FAFC; }
-.sidebar-footer__link--active { background-color: rgba(59, 130, 246, 0.3); color: #93C5FD; font-weight: 600; }
+.sidebar-footer__link:hover .sidebar-footer__text { color: var(--blog-text-bright); }
+.sidebar-footer__link--active { background-color: rgba(59, 130, 246, 0.3); color: var(--blog-blue-light); font-weight: 600; }
 
 .sidebar-footer__icon-wrapper {
   min-width: 60px; height: 100%; display: flex; align-items: center;
-  justify-content: center; border-radius: 6px; position: relative;
+  justify-content: center; border-radius: var(--blog-radius-sm); position: relative;
 }
 
 .sidebar-footer__icon-img { width: 28px; height: 28px; object-fit: contain; position: absolute; transition: opacity 0.3s ease, transform 0.3s ease; }

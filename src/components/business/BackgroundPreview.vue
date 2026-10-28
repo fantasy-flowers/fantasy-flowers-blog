@@ -66,11 +66,11 @@ const ariaLabel = computed(() => {
 .background-preview {
   position: relative;
   width: 100%;
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   overflow: hidden;
   margin-bottom: 12px;
   aspect-ratio: 16 / 9;
-  background-color: rgba(30, 42, 58, 0.6);
+  background-color: var(--blog-bg-card);
 }
 
 /* 预览图片 */

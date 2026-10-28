@@ -104,13 +104,13 @@ const yearGroups = computed(() => {
 // ==================== 方法 ====================
 
 /**
- * 格式化文章日期（仅月/日）
+ * 格式化文章日期（年/月/日，如 2026/10/27）
  * @param {Object} post - 文章对象
  * @returns {string} 格式化后的日期字符串
  */
 function formatPostDate(post) {
   const dateStr = post.publish_time || post.date || ''
-  return formatDate(dateStr, { month: '2-digit', day: '2-digit' })
+  return formatDate(dateStr, 'date')
 }
 
 /**
@@ -201,9 +201,9 @@ onMounted(async () => {
 .archive-card {
   position: relative;
   padding: 40px;
-  background-color: rgba(30, 42, 58, 0.6); /* 深色半透明背景，提供清晰的对比度 */
+  background-color: var(--blog-bg-card); /* 深色半透明背景，提供清晰的对比度 */
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(6px); /* 可选：毛玻璃效果 */
 }
@@ -256,7 +256,7 @@ onMounted(async () => {
   padding: 10px 16px;
   margin-left: -1px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   transition: background 0.2s ease;
 }
 

@@ -2,4 +2,27 @@
 :root {
     --body-overlay-gradient: linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.8));
     --background-image: url('/background/12.webp');
+
+    /* Batch 4 F2: 站点重复值统一变量（值逐位等于原值，仅做等值替换） */
+    --blog-bg-card: rgba(30, 42, 58, 0.6);
+    --blog-bg-card-strong: rgba(30, 42, 58, 0.8);
+    --blog-purple-soft: rgba(139, 92, 246, 0.2);
+    --blog-purple-mid: rgba(139, 92, 246, 0.3);
+    --blog-purple-strong: rgba(139, 92, 246, 0.4);
+    --blog-purple-ring: rgba(139, 92, 246, 0.6);
+    --blog-purple: #8B5CF6;
+    --blog-pink: #EC4899;
+    --blog-gray: #94A3B8;
+    --blog-gray-light: #CBD5E1;
+    --blog-purple-light: #C4B5FD;
+    --blog-text-bright: #F8FAFC;
+    --blog-blue: #60a5fa;
+    --blog-blue-light: #93c5fd;
+    --blog-blue-strong: #3b82f6;
+    --blog-border: rgba(255, 255, 255, 0.1);
+    --blog-border-strong: rgba(255, 255, 255, 0.2);
+    --blog-radius-lg: 12px;
+    --blog-radius-md: 8px;
+    --blog-radius-sm: 6px;
+    --blog-radius-xs: 4px;
 }

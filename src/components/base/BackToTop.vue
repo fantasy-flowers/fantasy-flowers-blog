@@ -104,7 +104,7 @@ onUnmounted(() => {
   width: 50px;
   height: 50px;
   background: rgba(30, 42, 58, 0.65) url('/icon/topboqi.gif') center/cover no-repeat;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   border-radius: 50%;
   color: #E2E8F0;
   font-size: 20px;
@@ -122,7 +122,7 @@ onUnmounted(() => {
 .back-to-top:hover:not(:disabled) {
   background-color: rgba(59, 130, 246, 0.2);
   border-color: rgba(59, 130, 246, 0.3);
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   transform: translateY(-3px) scale(1.1);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
@@ -130,14 +130,14 @@ onUnmounted(() => {
 /* Modifier: active 状态 */
 .back-to-top:active:not(:disabled) {
   background-color: rgba(59, 130, 246, 0.3);
-  border-color: #3B82F6;
+  border-color: var(--blog-blue-strong);
   transform: translateY(-1px) scale(1.05);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* Modifier: focus-visible 键盘焦点 */
 .back-to-top:focus-visible {
-  outline: 2px solid #3B82F6;
+  outline: 2px solid var(--blog-blue-strong);
   outline-offset: 2px;
 }
 

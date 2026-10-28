@@ -25,6 +25,7 @@ dist-ssr
 dist.zip
 *.local
 .review-dist
+.build-check
 
 # 日志文件
 # Log Files

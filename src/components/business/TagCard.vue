@@ -40,10 +40,10 @@ const navigateToTag = () => {
 
 <style scoped>
 .tag-card {
-  background-color: rgba(30, 42, 58, 0.6);
+  background-color: var(--blog-bg-card);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-lg);
   padding: 12px 16px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -90,7 +90,7 @@ const navigateToTag = () => {
 }
 
 .tag-name {
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   font-size: 1rem;
   font-weight: 600;
   white-space: nowrap;
@@ -107,7 +107,7 @@ const navigateToTag = () => {
 }
 
 .tag-count span {
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   font-size: 0.85rem;
   font-weight: 500;
 }

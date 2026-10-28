@@ -159,6 +159,7 @@ import { setPageMetadata } from '@/utils/metadata'
 import { generateTOC } from '@/utils/markdownUtils'
 import { getImageUrl } from '@/utils/imageUrl'
 import { useThrottle } from '@/composables/useThrottle'
+import { formatDateTime as formatDateTimeUtil } from '@/utils/format'
 import MarkdownRenderer from '@/components/business/MarkdownRenderer.vue'
 import LoadingSpinner from '@/components/base/LoadingSpinner.vue'
 import NavigationControls from '@/components/base/NavigationControls.vue'
@@ -224,18 +225,7 @@ const displayTags = computed(() => {
 })
 
 // 格式化日期时间 (包含时分)
-const formatDateTime = (dateString) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  }) + ' ' + date.toLocaleTimeString('zh-CN', {
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
+const formatDateTime = (dateString) => formatDateTimeUtil(dateString)
 
 // 滚动到指定标题
 const scrollToHeading = (id) => {
@@ -389,7 +379,7 @@ watch(post, () => {
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
 }
 
 /* 页面基础动画 */
@@ -427,9 +417,9 @@ watch(post, () => {
   max-height: 75vh;
   overflow-y: auto;
   background: rgba(30, 42, 58, 0.85);
-  border-radius: 12px;
+  border-radius: var(--blog-radius-lg);
   padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   z-index: 50;
 }
 
@@ -458,7 +448,7 @@ watch(post, () => {
   padding-bottom: 100%; /* 正方形 */
   position: relative;
   margin-bottom: 1.5rem;
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   overflow: hidden;
 }
 
@@ -496,19 +486,19 @@ watch(post, () => {
 }
 
 .toc-title {
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--blog-border);
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .toc-title i {
-  color: #8B5CF6;
+  color: var(--blog-purple);
 }
 
 .toc-list {
@@ -530,19 +520,19 @@ watch(post, () => {
 .toc-level-6 { margin-left: 5rem; }
 
 .toc-link {
-  color: #CBD5E1;
+  color: var(--blog-gray-light);
   text-decoration: none;
   font-size: 0.9rem;
   line-height: 1.4;
   display: block;
   padding: 0.35rem 0.5rem;
-  border-radius: 4px;
+  border-radius: var(--blog-radius-xs);
   border-left: 2px solid transparent;
   transition: all 0.2s ease;
 }
 
 .toc-link:hover {
-  color: #60a5fa;
+  color: var(--blog-blue);
   background: rgba(96, 165, 250, 0.1);
   border-left-color: rgba(96, 165, 250, 0.5);
 }
@@ -560,10 +550,10 @@ watch(post, () => {
   flex: 1;
   min-width: 0;
   margin-left: calc(20% + 2rem);
-  background: rgba(30, 42, 58, 0.6);
-  border-radius: 12px;
+  background: var(--blog-bg-card);
+  border-radius: var(--blog-radius-lg);
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   color: #1374d5;
 }
 
@@ -576,7 +566,7 @@ watch(post, () => {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   line-height: 1.3;
 }
 
@@ -596,7 +586,7 @@ watch(post, () => {
   padding: 0.4rem 0.8rem;
   background: rgba(236, 72, 153, 0.2);
   color: #F472B6;
-  border-radius: 6px;
+  border-radius: var(--blog-radius-sm);
   font-size: 0.9rem;
   transition: all 0.3s ease;
 }
@@ -616,8 +606,8 @@ watch(post, () => {
   align-items: center;
   gap: 0.35rem;
   padding: 0.35rem 0.7rem;
-  background: rgba(139, 92, 246, 0.2);
-  color: #C4B5FD;
+  background: var(--blog-purple-soft);
+  color: var(--blog-purple-light);
   border-radius: 9999px;
   font-size: 0.8rem;
   cursor: pointer;
@@ -625,7 +615,7 @@ watch(post, () => {
 }
 
 .article-tag:hover {
-  background: rgba(139, 92, 246, 0.4);
+  background: var(--blog-purple-strong);
   transform: translateY(-1px);
 }
 
@@ -634,7 +624,7 @@ watch(post, () => {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
   font-size: 0.875rem;
 }
 
@@ -651,7 +641,7 @@ watch(post, () => {
 /* 分隔线 */
 .article-divider {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--blog-border);
   margin: 1.5rem 0 2rem;
 }
 
@@ -663,7 +653,7 @@ watch(post, () => {
 
 article {
   
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 2px 8px rgb(198, 33, 96);
@@ -685,7 +675,7 @@ article {
   cursor: pointer;
   font-size: 10px;
   font-weight: 500;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 4px 15px var(--blog-purple-strong);
   transition: all 0.3s ease;
 }
 
@@ -763,7 +753,7 @@ article {
     max-height: 100vh;
     z-index: 1000;
     border-radius: 0;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid var(--blog-border);
     padding-top: 50px;
     /* 动画属性 */
     transform: translateX(-100%);

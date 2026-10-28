@@ -3,6 +3,7 @@
  * 初始化 Vue 应用、路由和状态管理
  */
 
+import '@/styles/fa-subset.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'

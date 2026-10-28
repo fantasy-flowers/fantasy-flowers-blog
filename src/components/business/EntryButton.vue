@@ -115,8 +115,8 @@ const handleTouchEnd = () => {
   padding: 1rem 2.5rem;
   background: rgba(59, 130, 246, 0.8);
   border: 2px solid rgba(59, 130, 246, 0.6);
-  border-radius: 8px;
-  color: #f8fafc;
+  border-radius: var(--blog-radius-md);
+  color: var(--blog-text-bright);
   font-size: 1.125rem;
   font-weight: 600;
   cursor: pointer;
@@ -131,7 +131,7 @@ const handleTouchEnd = () => {
 
 .entry-button:hover {
   background: rgba(59, 130, 246, 1);
-  border-color: #3b82f6;
+  border-color: var(--blog-blue-strong);
   transform: translateY(-2px) scale(1.02);
   box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
   animation: none;
@@ -150,7 +150,7 @@ const handleTouchEnd = () => {
 }
 
 .entry-button:focus-visible {
-  outline: 2px solid #3b82f6;
+  outline: 2px solid var(--blog-blue-strong);
   outline-offset: 2px;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5), 0 4px 15px rgba(59, 130, 246, 0.3);
 }

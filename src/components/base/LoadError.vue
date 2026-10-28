@@ -65,7 +65,7 @@ defineEmits({
   color: #e2e8f0;
   background-color: rgba(59, 130, 246, 0.3);
   border: 1px solid rgba(59, 130, 246, 0.5);
-  border-radius: 6px;
+  border-radius: var(--blog-radius-sm);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }

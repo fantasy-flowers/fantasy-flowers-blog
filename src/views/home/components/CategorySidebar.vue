@@ -33,10 +33,10 @@
 <style scoped>
 /* CategorySidebar 样式 - 响应式设计优化 */
 .category-sidebar {
-  background-color: rgba(30, 42, 58, 0.6);
+  background-color: var(--blog-bg-card);
   /* backdrop-filter removed for GPU optimization */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-lg);
   padding: 1.2rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -52,7 +52,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 16px;
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(59, 130, 246, 0.3);
   display: flex;

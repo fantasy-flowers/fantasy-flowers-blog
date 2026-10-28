@@ -241,39 +241,39 @@ defineExpose({ updateOpacity: handleInput })
 </script>
 
 <style scoped>
-.opacity-control { border-top: 1px solid rgba(255, 255, 255, 0.2); padding-top: 15px; }
+.opacity-control { border-top: 1px solid var(--blog-border-strong); padding-top: 15px; }
 .opacity-control__title { margin: 0 0 15px 0; font-size: 16px; text-align: center; color: #44eb0dcb; }
 .opacity-control__slider-container { margin-bottom: 15px; }
 .opacity-control__label { display: block; margin-bottom: 8px; font-size: 14px; color: #1c7dd8; }
 .opacity-control__slider {
-  width: 100%; height: 6px; border-radius: 3px; background: #cbd5e1;
+  width: 100%; height: 6px; border-radius: 3px; background: var(--blog-gray-light);
   outline: none; -webkit-appearance: none; appearance: none; transition: all 0.3s ease;
 }
 .opacity-control__slider::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%;
-  background: #8b5cf6; cursor: pointer; box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3); transition: all 0.3s ease;
+  background: var(--blog-purple); cursor: pointer; box-shadow: 0 2px 6px var(--blog-purple-mid); transition: all 0.3s ease;
 }
 .opacity-control__slider::-webkit-slider-thumb:hover { transform: scale(1.2); box-shadow: 0 3px 10px rgba(139, 92, 246, 0.5); }
 .opacity-control__slider::-moz-range-thumb {
-  width: 18px; height: 18px; border-radius: 50%; background: #8b5cf6;
-  cursor: pointer; box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3); border: none; transition: all 0.3s ease;
+  width: 18px; height: 18px; border-radius: 50%; background: var(--blog-purple);
+  cursor: pointer; box-shadow: 0 2px 6px var(--blog-purple-mid); border: none; transition: all 0.3s ease;
 }
 .opacity-control__slider::-moz-range-thumb:hover { transform: scale(1.2); box-shadow: 0 3px 10px rgba(139, 92, 246, 0.5); }
 .opacity-control__presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .opacity-control__preset-btn {
-  background-color: rgba(30, 42, 58, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px; padding: 8px 6px; font-size: 12px; cursor: pointer;
+  background-color: var(--blog-bg-card-strong); border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-md); padding: 8px 6px; font-size: 12px; cursor: pointer;
   transition: all 0.3s ease; color: #E2E8F0; font-weight: 500;
   width: 100%; box-sizing: border-box;
   height: 32px; line-height: 1; display: flex; align-items: center; justify-content: center;
 }
 .opacity-control__preset-btn:hover {
-  background-color: rgba(59, 130, 246, 0.2); color: #F8FAFC;
+  background-color: rgba(59, 130, 246, 0.2); color: var(--blog-text-bright);
   border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); transform: translateY(-1px);
 }
 .opacity-control__preset-btn--active {
-  background-color: rgba(59, 130, 246, 0.3); color: #93C5FD;
-  border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); font-weight: 600;
+  background-color: rgba(59, 130, 246, 0.3); color: var(--blog-blue-light);
+  border-color: var(--blog-blue-strong); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); font-weight: 600;
 }
 @media (max-width: 480px) {
   .opacity-control__title { font-size: 14px; margin-bottom: 12px; }

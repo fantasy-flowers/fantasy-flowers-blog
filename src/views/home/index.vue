@@ -125,7 +125,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
 }
 
 /* 页面基础动画 - 优化版本 */
@@ -214,7 +214,7 @@ onMounted(async () => {
 .empty-state {
   text-align: center;
   padding: 3rem 1rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
 }
 
 /* 响应式布局优化 */

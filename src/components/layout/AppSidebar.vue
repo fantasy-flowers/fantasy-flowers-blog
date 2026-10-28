@@ -109,9 +109,9 @@ const handleNavClick = () => {
   height: 100%;
   width: 250px;
   padding: 10px 14px;
-  background: rgba(30, 42, 58, 0.6);
+  background: var(--blog-bg-card);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1),
               box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 100;

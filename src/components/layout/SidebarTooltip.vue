@@ -192,11 +192,11 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   padding: 8px 12px;
-  background-color: rgba(30, 42, 58, 0.6);
+  background-color: var(--blog-bg-card);
   backdrop-filter: blur(10px); /* 保留用于提示框 */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
-  color: #F8FAFC;
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-sm);
+  color: var(--blog-text-bright);
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;

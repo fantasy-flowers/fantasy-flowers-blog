@@ -154,10 +154,10 @@ defineExpose({
 .search-box__input {
   width: 100%;
   padding: 0.75rem 1rem 0.75rem 2.5rem;
-  background-color: rgba(30, 42, 58, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  color: #F8FAFC;
+  background-color: var(--blog-bg-card-strong);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-md);
+  color: var(--blog-text-bright);
   font-size: 0.9rem;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
@@ -165,13 +165,13 @@ defineExpose({
 
 .search-box__input:focus {
   outline: none;
-  border-color: #8B5CF6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  border-color: var(--blog-purple);
+  box-shadow: 0 0 0 3px var(--blog-purple-soft);
   background-color: rgba(30, 42, 58, 0.9);
 }
 
 .search-box__input::placeholder {
-  color: #94A3B8;
+  color: var(--blog-gray);
 }
 
 .search-box__icon {
@@ -179,14 +179,14 @@ defineExpose({
   left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #94A3B8;
+  color: var(--blog-gray);
   transition: color 0.3s ease;
   z-index: 1;
 }
 
 .search-box__input:focus ~ .search-box__icon,
 .search-box:hover .search-box__icon {
-  color: #8B5CF6;
+  color: var(--blog-purple);
 }
 
 .search-box__shortcut {
@@ -196,10 +196,10 @@ defineExpose({
   transform: translateY(-50%);
   padding: 0.15rem 0.4rem;
   font-size: 0.7rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
   background-color: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
+  border-radius: var(--blog-radius-xs);
   pointer-events: none;
   line-height: 1;
 }

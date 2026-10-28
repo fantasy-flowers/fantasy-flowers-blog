@@ -1,4 +1,4 @@
-@import '@/styles/animations/_keyframes.css';
 @import '@/styles/variables.css';
+@import '@/styles/animations/_keyframes.css';
 @import '@/styles/global.css';
 @import '@/styles/tailwind-frozen.css';

@@ -100,7 +100,7 @@ const textColorStyle = computed(() => {
   justify-content: center;
   align-items: center;
   padding: 2rem;
-  color: #94a3b8;
+  color: var(--blog-gray);
 }
 
 /* Size modifiers */
@@ -136,7 +136,7 @@ const textColorStyle = computed(() => {
 /* Element: text */
 .loading-spinner__text {
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: var(--blog-gray);
   margin: 0;
 }
 

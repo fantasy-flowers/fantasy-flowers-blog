@@ -116,7 +116,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
 }
 
 @keyframes fadeIn {
@@ -134,7 +134,7 @@ onMounted(async () => {
   margin-bottom: 40px;
   padding: 40px 20px;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%);
-  border-radius: 12px;
+  border-radius: var(--blog-radius-lg);
   border: 1px solid rgba(59, 130, 246, 0.2);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   animation: slideDown 0.6s ease-out;
@@ -205,7 +205,7 @@ onMounted(async () => {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 16px;
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   position: relative;
 }
 
@@ -214,13 +214,13 @@ onMounted(async () => {
   display: block;
   width: 60px;
   height: 4px;
-  background: linear-gradient(135deg, #3B82F6 0%, #93C5FD 100%);
+  background: linear-gradient(135deg, var(--blog-blue-strong) 0%, var(--blog-blue-light) 100%);
   border-radius: 2px;
   margin: 10px auto;
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #3B82F6 0%, #93C5FD 100%);
+  background: linear-gradient(135deg, var(--blog-blue-strong) 0%, var(--blog-blue-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -228,7 +228,7 @@ onMounted(async () => {
 
 .header-subtitle {
   font-size: 1.1rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
   line-height: 1.6;
 }
 
@@ -249,8 +249,8 @@ onMounted(async () => {
 .description-card {
   background-color: rgba(30, 42, 58, var(--bg-opacity, 0.6));
   /* backdrop-filter removed for GPU optimization */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-lg);
   padding: 24px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
@@ -265,7 +265,7 @@ onMounted(async () => {
 .description-card h3 {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -285,7 +285,7 @@ onMounted(async () => {
 }
 
 .no-content-message h3 {
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -296,17 +296,17 @@ onMounted(async () => {
 }
 
 .no-content-message p {
-  color: #94A3B8;
+  color: var(--blog-gray);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
 
 /* 友情链接网格容器 */
 .friends-grid-container {
-  background-color: rgba(30, 42, 58, 0.6);
+  background-color: var(--blog-bg-card);
   /* backdrop-filter removed for GPU optimization */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-lg);
   padding: 24px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -320,7 +320,7 @@ onMounted(async () => {
 .friends-section-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   margin-bottom: 20px;
   display: flex;
   align-items: center;
@@ -344,7 +344,7 @@ onMounted(async () => {
   padding: 16px;
   background-color: rgba(59, 130, 246, 0.1);
   border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   text-decoration: none;
   transition: all 0.3s ease;
   color: inherit;
@@ -387,7 +387,7 @@ onMounted(async () => {
 }
 
 .friend-card:hover .friend-avatar {
-  border-color: #3B82F6;
+  border-color: var(--blog-blue-strong);
   box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
 }
 
@@ -400,7 +400,7 @@ onMounted(async () => {
 .friend-name {
   font-size: 1rem;
   font-weight: 600;
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
@@ -409,7 +409,7 @@ onMounted(async () => {
 
 .friend-description {
   font-size: 0.85rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;

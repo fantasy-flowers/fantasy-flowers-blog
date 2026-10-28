@@ -201,9 +201,9 @@ watch(categoryName, async () => {
   gap: 0.5rem;
   padding: 0.6rem 1.2rem;
   border-radius: 20px;
-  background-color: rgba(30, 42, 58, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94A3B8;
+  background-color: var(--blog-bg-card);
+  border: 1px solid var(--blog-border);
+  color: var(--blog-gray);
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.9rem;
@@ -219,8 +219,8 @@ watch(categoryName, async () => {
 
 .sort-button.active {
   background-color: rgba(59, 130, 246, 0.4);
-  border-color: #3B82F6;
-  color: #F8FAFC;
+  border-color: var(--blog-blue-strong);
+  color: var(--blog-text-bright);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 

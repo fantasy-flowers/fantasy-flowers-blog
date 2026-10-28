@@ -22,9 +22,9 @@ const navigateToSearch = () => {
 
 <style scoped>
 .nav-search-btn {
-  background-color: rgba(30, 42, 58, 0.6);
+  background-color: var(--blog-bg-card);
   backdrop-filter: blur(10px); /* 保留用于关键导航按钮 */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   color: #E2E8F0;
   padding: 10px;
   border-radius: 50%;
@@ -43,7 +43,7 @@ const navigateToSearch = () => {
 
 .nav-search-btn:hover {
   background-color: rgba(59, 130, 246, 0.2);
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   border-color: rgba(59, 130, 246, 0.3);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   transform: scale(1.1);
@@ -51,8 +51,8 @@ const navigateToSearch = () => {
 
 .nav-search-btn:active {
   background-color: rgba(59, 130, 246, 0.3);
-  color: #93C5FD;
-  border-color: #3B82F6;
+  color: var(--blog-blue-light);
+  border-color: var(--blog-blue-strong);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   transform: scale(1.05);
 }

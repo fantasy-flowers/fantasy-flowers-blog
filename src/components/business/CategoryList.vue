@@ -126,7 +126,7 @@ const handleCategoryClick = (categoryName) => {
 }
 
 .empty-message {
-  color: #94A3B8;
+  color: var(--blog-gray);
   font-size: 0.9rem;
   padding: 1rem;
   text-align: center;
@@ -137,7 +137,7 @@ const handleCategoryClick = (categoryName) => {
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   margin-bottom: 8px;
   color: #E2E8F0;
   cursor: pointer;
@@ -148,15 +148,15 @@ const handleCategoryClick = (categoryName) => {
 
 .category-item:hover {
   background-color: rgba(59, 130, 246, 0.2);
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   border-color: rgba(59, 130, 246, 0.3);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .category-item.active {
   background-color: rgba(59, 130, 246, 0.3);
-  color: #93C5FD;
-  border-color: #3B82F6;
+  color: var(--blog-blue-light);
+  border-color: var(--blog-blue-strong);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   font-weight: 600;
 }

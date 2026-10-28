@@ -127,7 +127,7 @@ const handleTagClick = (tagName) => {
 }
 
 .empty-message {
-  color: #94A3B8;
+  color: var(--blog-gray);
   font-size: 0.9rem;
   padding: 1rem;
   text-align: center;
@@ -146,7 +146,7 @@ const handleTagClick = (tagName) => {
   padding: 6px 12px;
   border-radius: 16px;
   background-color: rgba(59, 130, 246, 0.2);
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
@@ -156,16 +156,16 @@ const handleTagClick = (tagName) => {
 
 .tag-item:hover {
   background-color: rgba(59, 130, 246, 0.4);
-  color: #F8FAFC;
-  border-color: #3B82F6;
+  color: var(--blog-text-bright);
+  border-color: var(--blog-blue-strong);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   transform: translateY(-2px);
 }
 
 .tag-item.active {
   background-color: rgba(59, 130, 246, 0.6);
-  color: #F8FAFC;
-  border-color: #3B82F6;
+  color: var(--blog-text-bright);
+  border-color: var(--blog-blue-strong);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 

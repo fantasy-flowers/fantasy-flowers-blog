@@ -104,7 +104,7 @@ const socialLinks = computed(() => {
   position: relative;
   margin-top: auto;
   padding: 1rem 0;
-  color: #94A3B8;
+  color: var(--blog-gray);
   font-size: 0.75rem;
   transition: all 0.3s ease;
 }
@@ -128,7 +128,7 @@ const socialLinks = computed(() => {
 }
 
 .copyright {
-  color: #94A3B8;
+  color: var(--blog-gray);
   font-weight: 400;
   margin: 0;
   letter-spacing: 0.3px;
@@ -142,14 +142,14 @@ const socialLinks = computed(() => {
 }
 
 .beian-link {
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 0.7rem;
 }
 
 .beian-link:hover {
-  color: #60A5FA;
+  color: var(--blog-blue);
   text-decoration: underline;
 }
 
@@ -157,12 +157,12 @@ const socialLinks = computed(() => {
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
   font-size: 0.7rem;
 }
 
 .tech-link {
-  color: #8B5CF6;
+  color: var(--blog-purple);
   text-decoration: none;
   font-weight: 400;
   transition: all 0.3s ease;
@@ -177,7 +177,7 @@ const socialLinks = computed(() => {
   left: 0;
   width: 0;
   height: 1px;
-  background: linear-gradient(90deg, #8B5CF6, #EC4899);
+  background: linear-gradient(90deg, var(--blog-purple), var(--blog-pink));
   transition: width 0.3s ease;
 }
 
@@ -207,14 +207,14 @@ const socialLinks = computed(() => {
   text-decoration: none;
   transition: all 0.3s ease;
   font-size: 0.75rem;
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  border: 1px solid var(--blog-purple-soft);
 }
 
 .social-link:hover {
-  background: rgba(139, 92, 246, 0.3);
-  color: #C4B5FD;
+  background: var(--blog-purple-mid);
+  color: var(--blog-purple-light);
   transform: translateY(-2px);
-  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 2px 8px var(--blog-purple-soft);
 }
 
 .social-link i {

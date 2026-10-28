@@ -161,20 +161,20 @@ const handleKeydown = (event) => {
   transition: all 0.2s ease;
   background-color: transparent;
   border: 1px solid transparent;
-  color: #94a3b8;
+  color: var(--blog-gray);
 }
 
 /* Modifier: number button hover */
 .pagination__btn--number:hover:not(.pagination__btn--active) {
   color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--blog-border);
 }
 
 /* Modifier: active page */
 .pagination__btn--active {
-  background-color: #3b82f6;
+  background-color: var(--blog-blue-strong);
   color: #ffffff;
-  border-color: #3b82f6;
+  border-color: var(--blog-blue-strong);
   pointer-events: none;
   box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 }
@@ -187,7 +187,7 @@ const handleKeydown = (event) => {
 
 .pagination__btn--nav:hover:not(:disabled) {
   color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--blog-border);
 }
 
 .pagination__btn--nav:disabled {

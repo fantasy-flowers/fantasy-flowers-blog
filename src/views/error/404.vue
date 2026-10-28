@@ -77,7 +77,7 @@ onMounted(() => {
   border-radius: 1.5rem;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  border: 4px solid rgba(255, 255, 255, 0.1);
+  border: 4px solid var(--blog-border);
   transition: all 0.3s ease;
 }
 
@@ -96,13 +96,13 @@ onMounted(() => {
 h1 {
   font-size: 8rem !important;
   font-weight: bold !important;
-  color: #EC4899 !important;
+  color: var(--blog-pink) !important;
   line-height: 1 !important;
   margin: 0 !important;
 }
 
 p {
-  color: #EC4899 !important;
+  color: var(--blog-pink) !important;
   font-size: 1.5rem !important;
   margin-top: 0.5rem !important;
 }
@@ -121,14 +121,14 @@ p + p {
   padding: 12px 16px;
   min-width: 44px;
   height: 44px;
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   background-color: rgba(59, 130, 246, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   color: #E2E8F0;
   margin-top: 2rem;
 }
@@ -141,14 +141,14 @@ p + p {
 .nav-control-btn:hover {
   background-color: rgba(212, 56, 145, 0.723);
   border-color: rgba(59, 130, 246, 0.3);
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   transform: translateY(-3px) scale(1.1);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .nav-control-btn:active {
   background-color: rgb(11, 181, 228);
-  border-color: #3B82F6;
+  border-color: var(--blog-blue-strong);
   transform: translateY(-1px) scale(1.05);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }

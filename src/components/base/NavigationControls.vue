@@ -137,14 +137,14 @@ onUnmounted(() => {
   padding: 12px 16px;
   min-width: 44px;
   height: 44px;
-  border-radius: 8px;
+  border-radius: var(--blog-radius-md);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  background-color: rgba(30, 42, 58, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: var(--blog-bg-card);
+  border: 1px solid var(--blog-border);
   color: #E2E8F0;
 }
 
@@ -156,14 +156,14 @@ onUnmounted(() => {
 .nav-control-btn:hover:not(:disabled) {
   background-color: rgba(59, 130, 246, 0.2);
   border-color: rgba(59, 130, 246, 0.3);
-  color: #93C5FD;
+  color: var(--blog-blue-light);
   transform: translateY(-3px) scale(1.1);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .nav-control-btn:active:not(:disabled) {
   background-color: rgba(59, 130, 246, 0.3);
-  border-color: #3B82F6;
+  border-color: var(--blog-blue-strong);
   transform: translateY(-1px) scale(1.05);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }

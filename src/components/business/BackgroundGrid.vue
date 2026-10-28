@@ -111,9 +111,9 @@ const handleSelect = (filename) => {
 
 /* 网格项（按钮） */
 .background-grid__item {
-  background-color: rgba(30, 42, 58, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  background-color: var(--blog-bg-card-strong);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-md);
   padding: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -129,7 +129,7 @@ const handleSelect = (filename) => {
 
 .background-grid__item:hover {
   background-color: rgba(59, 130, 246, 0.2);
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   border-color: rgba(59, 130, 246, 0.3);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
   transform: translateY(-1px);
@@ -138,8 +138,8 @@ const handleSelect = (filename) => {
 /* 选中状态 */
 .background-grid__item--active {
   background-color: rgba(59, 130, 246, 0.3);
-  color: #93C5FD;
-  border-color: #3B82F6;
+  color: var(--blog-blue-light);
+  border-color: var(--blog-blue-strong);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
   font-weight: 600;
 }
@@ -148,7 +148,7 @@ const handleSelect = (filename) => {
 .background-grid__thumbnail {
   width: 40px;
   height: 25px;
-  border-radius: 4px;
+  border-radius: var(--blog-radius-xs);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -175,7 +175,7 @@ const handleSelect = (filename) => {
 
 /* 选中时缩略图效果 */
 .background-grid__item--active .background-grid__thumbnail {
-  border-color: #3B82F6;
+  border-color: var(--blog-blue-strong);
   box-shadow:
     inset 0 1px 2px rgba(0, 0, 0, 0.1),
     0 1px 3px rgba(0, 0, 0, 0.2),

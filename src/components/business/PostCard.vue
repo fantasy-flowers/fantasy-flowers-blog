@@ -1,43 +1,44 @@
 <template>
-  <article
-    class="post-card"
-    role="article"
-    :aria-label="`文章: ${post.title}`"
-    tabindex="0"
+  <RouterLink
+    :to="{ name: 'post-detail', params: { id: post.id } }"
+    class="post-card-link"
     @click="handleClick"
-    @keydown.enter="handleClick"
   >
-    <div class="post-card__header">
-      <img
-        :src="getImageUrl(post.cover_image || post.image)"
-        :alt="post.title"
-        class="post-card__image"
-        loading="lazy"
-      >
-    </div>
-    <div class="post-card__body">
-      <h3 class="post-card__title">{{ post.title }}</h3>
-      <div class="post-card__meta">
-        <span class="post-card__date">{{ formatDate(post.publish_time || post.date) }}</span>
-        <span class="post-card__views">{{ post.view_count || post.views || 0 }} 阅读</span>
-      </div>
-      <p class="post-card__excerpt">{{ post.summary || post.excerpt }}</p>
-      <div class="post-card__tags" v-if="visibleTags.length > 0">
-        <span
-          v-for="tag in visibleTags"
-          :key="tag.id || tag.name || tag"
-          class="post-card__tag"
-          role="link"
-          tabindex="0"
-          :aria-label="`标签: ${tag.name || tag}`"
-          @click.stop="handleTagClick(tag.name || tag)"
-          @keydown.enter.stop="handleTagClick(tag.name || tag)"
+    <article
+      class="post-card"
+      role="article"
+      :aria-label="`文章: ${post.title}`"
+    >
+      <div class="post-card__header">
+        <img
+          :src="getImageUrl(post.cover_image || post.image)"
+          :alt="post.title"
+          class="post-card__image"
+          loading="lazy"
         >
-          {{ tag.name || tag }}
-        </span>
       </div>
-    </div>
-  </article>
+      <div class="post-card__body">
+        <h3 class="post-card__title">{{ post.title }}</h3>
+        <div class="post-card__meta">
+          <span class="post-card__date">{{ formatDate(post.publish_time || post.date, 'date') }}</span>
+          <span class="post-card__views">{{ post.view_count || post.views || 0 }} 阅读</span>
+        </div>
+        <p class="post-card__excerpt">{{ post.summary || post.excerpt }}</p>
+        <div class="post-card__tags" v-if="visibleTags.length > 0">
+          <button
+            v-for="tag in visibleTags"
+            :key="tag.id || tag.name || tag"
+            type="button"
+            class="post-card__tag"
+            :aria-label="`标签: ${tag.name || tag}`"
+            @click.stop="handleTagClick(tag.name || tag)"
+          >
+            {{ tag.name || tag }}
+          </button>
+        </div>
+      </div>
+    </article>
+  </RouterLink>
 </template>
 
 <script setup>
@@ -55,6 +56,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { getImageUrl } from '@/utils/imageUrl'
 import { isValidPost } from '@/types/components'
+import { formatDate } from '@/utils/format'
 
 // ==================== Props 定义 ====================
 const props = defineProps({
@@ -104,26 +106,10 @@ const visibleTags = computed(() => {
 // ==================== 方法 ====================
 
 /**
- * 格式化日期为中文格式
- * @param {string} dateString - 日期字符串
- * @returns {string} 格式化后的日期
- */
-const formatDate = (dateString) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toLocaleDateString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  })
-}
-
-/**
- * 处理卡片点击，触发 emit 并导航到文章详情
+ * 处理卡片点击，触发 emit（导航由外层 RouterLink 完成）
  */
 const handleClick = () => {
   emit('click', props.post.id)
-  router.push({ name: 'post-detail', params: { id: props.post.id } })
 }
 
 /**
@@ -138,11 +124,24 @@ const handleTagClick = (tagName) => {
 
 <style scoped>
 /* Block */
+.post-card-link {
+  display: block;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--blog-radius-lg);
+}
+
+.post-card-link:focus-visible {
+  outline: 2px solid var(--blog-purple-ring);
+  outline-offset: 2px;
+}
+
 .post-card {
-  background-color: rgba(30, 42, 58, 0.6);
-  border-radius: 12px;
+  background-color: var(--blog-bg-card);
+  border-radius: var(--blog-radius-lg);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   transition: transform 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
   height: 100%;
@@ -153,13 +152,13 @@ const handleTagClick = (tagName) => {
 
 .post-card::after {
   content: ''; position: absolute; inset: 0;
-  box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 10px 15px -3px var(--blog-purple-soft);
   opacity: 0; transition: opacity 0.3s ease;
-  pointer-events: none; z-index: -1; border-radius: 12px;
+  pointer-events: none; z-index: -1; border-radius: var(--blog-radius-lg);
 }
-.post-card:hover { transform: translateY(-4px); border-color: rgba(139, 92, 246, 0.3); }
+.post-card:hover { transform: translateY(-4px); border-color: var(--blog-purple-mid); }
 .post-card:hover::after { opacity: 1; }
-.post-card:focus-visible { outline: 2px solid rgba(139, 92, 246, 0.6); outline-offset: 2px; }
+.post-card:focus-visible { outline: 2px solid var(--blog-purple-ring); outline-offset: 2px; }
 
 /* Elements */
 .post-card__header {
@@ -202,7 +201,7 @@ const handleTagClick = (tagName) => {
   font-weight: 600;
   margin-bottom: 0.5rem;
   transition: color 0.3s ease;
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -212,7 +211,7 @@ const handleTagClick = (tagName) => {
 }
 
 .post-card:hover .post-card__title {
-  color: #EC4899;
+  color: var(--blog-pink);
 }
 
 .post-card__meta {
@@ -221,11 +220,11 @@ const handleTagClick = (tagName) => {
   align-items: center;
   margin-bottom: 1rem;
   font-size: 0.8rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
 }
 
 .post-card__excerpt {
-  color: #CBD5E1;
+  color: var(--blog-gray-light);
   font-size: 0.9rem;
   margin-bottom: 1rem;
   display: -webkit-box;
@@ -245,23 +244,29 @@ const handleTagClick = (tagName) => {
 }
 
 .post-card__tag {
-  background-color: rgba(139, 92, 246, 0.2);
-  color: #C4B5FD;
+  background-color: var(--blog-purple-soft);
+  color: var(--blog-purple-light);
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
   font-size: 0.75rem;
   transition: all 0.3s ease;
   cursor: pointer;
+  /* button UA 重置（span → button，保持视觉一致）。
+     color 已有显式 var(--blog-purple-light)，无需 inherit */
+  border: none;
+  font-family: inherit;
+  line-height: inherit;
+  text-align: inherit;
 }
 
 .post-card__tag:hover {
-  background-color: rgba(139, 92, 246, 0.4);
-  color: #F8FAFC;
+  background-color: var(--blog-purple-strong);
+  color: var(--blog-text-bright);
   transform: translateY(-1px);
 }
 
 .post-card__tag:focus-visible {
-  outline: 2px solid rgba(139, 92, 246, 0.6);
+  outline: 2px solid var(--blog-purple-ring);
   outline-offset: 1px;
 }
 

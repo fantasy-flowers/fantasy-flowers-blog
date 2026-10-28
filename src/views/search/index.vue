@@ -238,10 +238,10 @@ onMounted(() => {
   justify-content: center;
   text-align: center;
   padding: 2rem;
-  background-color: rgba(30, 42, 58, 0.6);
-  border-radius: 12px;
+  background-color: var(--blog-bg-card);
+  border-radius: var(--blog-radius-lg);
   /* backdrop-filter removed for GPU optimization */
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--blog-border);
   max-width: 500px;
   width: 90%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -264,7 +264,7 @@ onMounted(() => {
 
 .empty-search-subtext {
   font-size: 1rem;
-  color: #94A3B8;
+  color: var(--blog-gray);
   margin-top: 0;
 }
 

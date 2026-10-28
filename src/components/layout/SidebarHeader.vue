@@ -118,7 +118,7 @@ defineEmits({
   align-items: center;
   justify-content: center;
   min-width: 60px;
-  border-radius: 6px;
+  border-radius: var(--blog-radius-sm);
 }
 
 .sidebar-header__avatar-img {
@@ -127,7 +127,7 @@ defineEmits({
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--blog-border);
   aspect-ratio: 1 / 1;
   box-sizing: border-box;
 }
@@ -152,7 +152,7 @@ defineEmits({
   margin-top: 2px;
   font-size: 18px;
   font-weight: 600;
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   white-space: nowrap;
 }
 
@@ -162,7 +162,7 @@ defineEmits({
   font-size: 12px;
   margin-top: -2px;
   display: block;
-  color: #94A3B8;
+  color: var(--blog-gray);
   white-space: nowrap;
 }
 
@@ -176,7 +176,7 @@ defineEmits({
   height: 30px;
   width: 30px;
   background-color: rgba(59, 130, 246, 0.5);
-  color: #F8FAFC;
+  color: var(--blog-text-bright);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -186,7 +186,7 @@ defineEmits({
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   z-index: 101;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--blog-border);
 }
 
 /* ==================== Modifier: toggle--collapsed ==================== */
