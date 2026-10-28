@@ -5,14 +5,14 @@
       <AnimatedHeader :duration="600">
         <header class="header">
           <h1 class="header-title">分类: {{ categoryName }}</h1>
-          <p class="header-subtitle">共 {{ categoryPosts.length }} 篇文章</p>
+          <p class="header-subtitle">共 {{ displayedTotal }} 篇文章</p>
           
           <!-- 排序控件 -->
           <div class="sort-controls">
             <button 
               class="sort-button"
               :class="{ active: sortBy === 'time' }"
-              @click="sortBy = 'time'"
+              @click="changeSort('time')"
             >
               <i class="fa fa-calendar"></i>
               <span>最新发布</span>
@@ -20,7 +20,7 @@
             <button 
               class="sort-button"
               :class="{ active: sortBy === 'views' }"
-              @click="sortBy = 'views'"
+              @click="changeSort('views')"
             >
               <i class="fa fa-eye"></i>
               <span>最多阅读</span>
@@ -29,9 +29,9 @@
         </header>
       </AnimatedHeader>
       
-      <AnimatedGrid v-if="sortedPosts.length > 0" :duration="600" :delay="200">
+      <AnimatedGrid v-if="displayedPosts.length > 0" :duration="600" :delay="200">
         <PostCard 
-          v-for="post in paginatedPosts" 
+          v-for="post in displayedPosts" 
           :key="post.id" 
           :post="post"
         />
@@ -72,86 +72,111 @@ const blogStore = useBlogStore()
 const sortBy = ref('time') // 'time' or 'views'
 
 const categoryName = computed(() => route.params?.name || '')
-const categoryPosts = computed(() => {
-  const name = categoryName.value
-  if (!name) return []
-  return blogStore.getPostsByCategory(name)
-})
-
-// 排序后的文章列表
-const sortedPosts = computed(() => {
-  const posts = [...categoryPosts.value]
-  
-  if (sortBy.value === 'time') {
-    // 按发布时间降序排序
-    return posts.sort((a, b) => {
-      const timeA = new Date(a.created_at).getTime()
-      const timeB = new Date(b.created_at).getTime()
-      return timeB - timeA
-    })
-  } else if (sortBy.value === 'views') {
-    // 按阅读量降序排序
-    return posts.sort((a, b) => {
-      const viewsA = a.view_count || 0
-      const viewsB = b.view_count || 0
-      return viewsB - viewsA
-    })
-  }
-  
-  return posts
-})
 
 // 分页设置
 const currentPage = ref(1)
 const itemsPerPage = 6
 
-// 计算总页数
-const totalPages = computed(() => {
-  return Math.ceil(sortedPosts.value.length / itemsPerPage)
+// B1：服务端分页。dataReady 门控展示数据，避免展示其他上下文（首页/其他分类）的旧数据
+const dataReady = ref(false)
+
+const displayedPosts = computed(() => {
+  return dataReady.value ? blogStore.posts : []
 })
 
-// 获取当前页文章
-const paginatedPosts = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  const end = start + itemsPerPage
-  return sortedPosts.value.slice(start, end)
+const displayedTotal = computed(() => {
+  return dataReady.value ? blogStore.postsTotal : 0
 })
+
+// 计算总页数（服务端 total）
+const totalPages = computed(() => {
+  return Math.ceil(displayedTotal.value / itemsPerPage)
+})
+
+// 请求序号守卫：防止快速切换分类/排序时的过期响应回填
+let loadSeq = 0
+
+/**
+ * 由分类名解析分类 id；分类列表未加载时先拉取列表
+ * @returns {Promise<number|null>} 分类 id，找不到返回 null（等价于旧客户端过滤的 miss）
+ */
+const resolveCategoryId = async () => {
+  const name = categoryName.value
+  if (!name) return null
+
+  let category = blogStore.categories.find(cat => cat.name === name)
+  if (!category) {
+    await blogStore.fetchCategories()
+    category = blogStore.categories.find(cat => cat.name === name)
+  }
+  return category ? category.id : null
+}
+
+/**
+ * B1：按服务端分页加载当前分类下文章
+ * @param {number} page - 页码
+ * @param {boolean} hideStale - 切换分类（上下文变化）时先隐藏旧数据，避免闪现其他分类的文章
+ */
+const loadPage = async (page, hideStale = false) => {
+  const seq = ++loadSeq
+
+  const categoryId = await resolveCategoryId()
+  if (seq !== loadSeq) return
+
+  if (categoryId == null) {
+    // 分类不存在：与旧客户端过滤 miss 一致——空结果呈现
+    dataReady.value = false
+    return
+  }
+
+  if (hideStale) {
+    dataReady.value = false
+  }
+
+  await blogStore.fetchArticlesPage({
+    categoryId,
+    page,
+    pageSize: itemsPerPage,
+    sortBy: sortBy.value
+  })
+
+  if (seq !== loadSeq) return
+  dataReady.value = true
+}
+
+// 切换排序：重置到第 1 页并重新请求（后端按 sortBy 排序，语义与旧客户端排序一致）
+const changeSort = async (value) => {
+  if (sortBy.value === value) return
+  sortBy.value = value
+  currentPage.value = 1
+  await loadPage(1)
+}
 
 // 处理页码切换
-const handlePageChange = (page) => {
+const handlePageChange = async (page) => {
   currentPage.value = page
   window.scrollTo({ top: 0, behavior: 'smooth' })
+  await loadPage(page)
 }
 
 // 设置页面元数据
 const updateMetadata = () => {
   setPageMetadata({
     title: `分类: ${categoryName.value}`,
-    description: `Fantasy Flowers博客${categoryName.value}分类下的文章，共${categoryPosts.value.length}篇文章`,
+    description: `Fantasy Flowers博客${categoryName.value}分类下的文章，共${displayedTotal.value}篇文章`,
     keywords: `${categoryName.value},分类,博客文章`
   })
 }
 
-// 加载文章数据
-const ensureDataLoaded = async () => {
-  // 如果文章列表为空且未在加载中，则加载数据
-  // App.vue 应该已经加载了数据，这里作为兜底
-  // D2：分类场景使用独立的 categoryLoading 判断，避免与列表/详情加载态串扰
-  if (blogStore.posts.length === 0 && !blogStore.categoryLoading) {
-    await blogStore.fetchCategoryArticles()
-  }
-}
-
 onMounted(async () => {
-  await ensureDataLoaded()
+  await loadPage(1, true)
   updateMetadata()
 })
 
-// 监听分类变化，更新元数据
+// 监听分类变化，重置页码并重新请求
 watch(categoryName, async () => {
   currentPage.value = 1
-  // 分类变化时通常不需要重新加载所有文章，除非之前没加载
-  await ensureDataLoaded()
+  await loadPage(1, true)
   updateMetadata()
 })
 </script>

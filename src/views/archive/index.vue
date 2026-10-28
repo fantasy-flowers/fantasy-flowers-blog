@@ -131,8 +131,9 @@ onMounted(async () => {
     keywords: '归档,文章,时间线,博客'
   })
 
-  // 确保数据已加载
-  await blogStore.initializeData()
+  // 归档页独立拉取全量文章（B1 后 store 仅保留当前页数据，
+  // 按年分组与「共 X 篇」计数需要全量列表，此处一次性请求 pageSize=100）
+  await blogStore.fetchArticles({ page: 1, pageSize: 100 })
 })
 </script>
 

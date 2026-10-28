@@ -2,8 +2,8 @@
   <div class="search-page">
     <header class="header animated-header">
       <h1 class="header-title">搜索文章</h1>
-      <p class="header-subtitle" v-if="blogStore.searchQuery">
-        关键词: "{{ blogStore.searchQuery }}" - 共 {{ blogStore.filteredPosts.length }} 篇文章
+      <p class="header-subtitle" v-if="activeQuery">
+        关键词: "{{ activeQuery }}" - 共 {{ displayedCount }} 篇文章
       </p>
       <p class="header-subtitle" v-else>
         请输入搜索关键词
@@ -20,11 +20,11 @@
       />
     </div>
     
-    <div v-if="blogStore.searchQuery && blogStore.filteredPosts.length > 0" class="posts-grid-container animated-card" style="animation-delay: 0.4s;">
+    <div v-if="activeQuery && displayedPosts.length > 0" class="posts-grid-container animated-card" style="animation-delay: 0.4s;">
       <div class="posts-wrapper">
         <div class="posts-grid">
             <PostCard 
-              v-for="post in paginatedPosts" 
+              v-for="post in displayedPosts" 
               :key="post.id" 
               :post="post"
             />
@@ -39,10 +39,10 @@
       </div>
     </div>
     
-    <div v-else-if="blogStore.searchQuery && blogStore.filteredPosts.length === 0" class="empty-search-container">
+    <div v-else-if="activeQuery && displayedPosts.length === 0" class="empty-search-container">
       <div class="empty-search-content">
         <img src="/icon/search.gif" class="empty-search-icon" alt="搜索图标">
-        <p class="empty-search-text">没有找到包含 "{{ blogStore.searchQuery }}" 的文章</p>
+        <p class="empty-search-text">没有找到包含 "{{ activeQuery }}" 的文章</p>
         <p class="empty-search-subtext">请尝试使用其他关键词</p>
       </div>
     </div>
@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, watch, ref, nextTick } from 'vue'
+import { computed, onMounted, ref, nextTick } from 'vue'
 import SearchBox from '@/components/base/SearchBox.vue'
 import PostCard from '@/components/business/PostCard.vue'
 import Pagination from '@/components/base/Pagination.vue'
@@ -61,46 +61,93 @@ const blogStore = useBlogStore()
 const searchBoxRef = ref(null)
 const localSearchQuery = ref(blogStore.searchQuery || '')
 
-const searchQuery = computed(() => blogStore.searchQuery)
-const searchResults = computed(() => blogStore.filteredPosts)
-
-/**
- * 处理搜索事件，将查询同步到 store
- * @param {string} query - 搜索关键词
- */
-const handleSearch = (query) => {
-  blogStore.setSearchQuery(query)
-}
+// C1：服务端搜索状态。serverCompleted=false 期间沿用本地过滤作为临时呈现，
+// 服务端结果（title+summary+content 命中）落库后切换为服务端分页数据
+const serverCompleted = ref(false)
+const activeQuery = ref('')
+let searchSeq = 0
 
 // 分页设置
 const currentPage = ref(1)
 const itemsPerPage = 6
 
+// 展示列表：服务端阶段直接展示当前页数据；本地阶段沿用原客户端分页 slice
+const displayedPosts = computed(() => {
+  if (serverCompleted.value) {
+    return blogStore.posts
+  }
+  const start = (currentPage.value - 1) * itemsPerPage
+  return blogStore.filteredPosts.slice(start, start + itemsPerPage)
+})
+
+// 副标题计数：服务端阶段用服务端 total，本地阶段沿用 filteredPosts 长度（格式不变）
+const displayedCount = computed(() => {
+  return serverCompleted.value ? blogStore.postsTotal : blogStore.filteredPosts.length
+})
+
 // 计算总页数
 const totalPages = computed(() => {
-  return Math.ceil(searchResults.value.length / itemsPerPage)
+  return Math.ceil(displayedCount.value / itemsPerPage)
 })
 
-// 获取当前页文章
-const paginatedPosts = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  const end = start + itemsPerPage
-  return searchResults.value.slice(start, end)
-})
+/**
+ * 处理搜索事件（SearchBox 自带 300ms 防抖，保持不变）
+ * C1：先本地过滤即时反馈，再请求服务端搜索（title+summary+content）
+ * @param {string} query - 搜索关键词
+ */
+const handleSearch = async (query) => {
+  const keyword = (query || '').trim()
+  const seq = ++searchSeq
+  activeQuery.value = keyword
+  currentPage.value = 1
+
+  if (!keyword) {
+    serverCompleted.value = false
+    blogStore.setSearchQuery('')
+    updateMetadata()
+    return
+  }
+
+  // 本地过滤：服务端结果返回前的临时呈现，保持输入过程的即时反馈
+  blogStore.setSearchQuery(keyword)
+  updateMetadata()
+
+  // 服务端搜索（第 1 页）
+  await blogStore.searchArticles(keyword, 1)
+
+  // 过期响应（期间又触发了新搜索）不落库
+  if (seq !== searchSeq) return
+
+  serverCompleted.value = true
+  // 服务端结果总是第 1 页：本地阶段若已翻页，回正页码，避免页号与数据错位
+  currentPage.value = 1
+  // 清空客户端过滤：否则按 title 过滤会隐藏服务端按 title+summary+content 命中的结果
+  blogStore.setSearchQuery('')
+  updateMetadata()
+}
 
 // 处理页码切换
-const handlePageChange = (page) => {
+const handlePageChange = async (page) => {
   currentPage.value = page
   window.scrollTo({ top: 0, behavior: 'smooth' })
+
+  // 服务端结果已落库：翻页改为请求服务端对应页
+  if (serverCompleted.value && activeQuery.value) {
+    const seq = ++searchSeq
+    await blogStore.searchArticles(activeQuery.value, page)
+    if (seq === searchSeq) {
+      blogStore.setSearchQuery('')
+    }
+  }
 }
 
 // 设置页面元数据
 const updateMetadata = () => {
-  if (searchQuery.value) {
+  if (activeQuery.value) {
     setPageMetadata({
-      title: `搜索: ${searchQuery.value}`,
-      description: `Fantasy Flowers博客搜索"${searchQuery.value}"的结果，共${searchResults.value.length}篇文章`,
-      keywords: `${searchQuery.value},搜索,博客文章`
+      title: `搜索: ${activeQuery.value}`,
+      description: `Fantasy Flowers博客搜索"${activeQuery.value}"的结果，共${displayedCount.value}篇文章`,
+      keywords: `${activeQuery.value},搜索,博客文章`
     })
   } else {
     setPageMetadata({
@@ -118,16 +165,6 @@ onMounted(() => {
   nextTick(() => {
     searchBoxRef.value?.focus()
   })
-})
-
-// 监听搜索查询变化，更新元数据
-watch(searchQuery, (newQuery) => {
-  currentPage.value = 1
-  updateMetadata()
-  // 同步外部 store 变化到本地搜索值
-  if (newQuery !== localSearchQuery.value) {
-    localSearchQuery.value = newQuery || ''
-  }
 })
 </script>
 <style scoped>

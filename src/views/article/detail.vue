@@ -154,7 +154,7 @@
 import { computed, onMounted, onUnmounted, watch, ref, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useBlogStore } from '@/stores/modules/blog'
-import { useSidebarStore } from '@/stores/modules/sidebar'
+import { isCancelError } from '@/utils/http'
 import { setPageMetadata } from '@/utils/metadata'
 import { generateTOC } from '@/utils/markdownUtils'
 import { getImageUrl } from '@/utils/imageUrl'
@@ -188,8 +188,22 @@ const post = computed(() => {
   if (cached && cached.content) return cached
   return null
 })
-const prevPost = computed(() => blogStore.getPrevPost(parseInt(route.params.id)))
-const nextPost = computed(() => blogStore.getNextPost(parseInt(route.params.id)))
+// D4：上下篇优先取详情接口返回的 prev_article/next_article（{id,title} 或 null，与列表缺省排序一致）；
+// 接口未提供时隐藏按钮（旧 getPrevPost/getNextPost 依赖列表全量数据，B1 分页后已不适用）
+const prevPost = computed(() => {
+  const current = blogStore.currentPost
+  if (current && parseInt(current.id) === parseInt(route.params.id) && current.prev_article) {
+    return current.prev_article
+  }
+  return null
+})
+const nextPost = computed(() => {
+  const current = blogStore.currentPost
+  if (current && parseInt(current.id) === parseInt(route.params.id) && current.next_article) {
+    return current.next_article
+  }
+  return null
+})
 
 // 处理内容（不需要添加锚点，MarkdownRenderer会自动处理）
 const processedContent = computed(() => {
@@ -330,6 +344,8 @@ const loadArticle = async (postId) => {
       updateActiveHeading()
     })
   } catch (error) {
+    // C3：被取消的旧请求（路由已切换）静默退出，不作为错误浮出
+    if (isCancelError(error)) return
     console.error('加载文章失败:', error)
     // 如果是404错误，清空当前文章（C2：兼容统一错误对象的 status 与原始 axios response）
     if (error.status === 404 || error.response?.status === 404) {

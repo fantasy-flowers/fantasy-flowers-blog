@@ -8,13 +8,12 @@
     <div class="home-content">
       <div class="posts-main">
         <!-- 加载状态 -->
-        <!-- 加载状态 -->
-        <div v-if="blogStore.postsLoading" class="loading-state">
+        <div v-if="blogStore.postsLoading && blogStore.posts.length === 0" class="loading-state">
           <LoadingSpinner text="加载中..." />
         </div>
         
         <!-- 文章列表 -->
-        <div v-else-if="blogStore.filteredPosts.length > 0" class="posts-grid-container">
+        <div v-else-if="blogStore.posts.length > 0" class="posts-grid-container">
           <!-- 虚拟滚动容器 -->
           <!-- 标准分页布局 -->
           <div class="posts-wrapper">
@@ -22,7 +21,7 @@
               class="posts-grid"
             >
               <PostCard 
-                v-for="post in paginatedPosts" 
+                v-for="post in blogStore.posts" 
                 :key="post.id" 
                 :post="post"
               />
@@ -50,7 +49,7 @@
 
 <script setup>
 
-import { onMounted, computed, ref, defineAsyncComponent, watch } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import PostCard from '@/components/business/PostCard.vue'
 import PoemDisplay from './components/PoemDisplay.vue'
 import CategorySidebar from './components/CategorySidebar.vue'
@@ -66,40 +65,24 @@ const blogStore = useBlogStore()
 const currentPage = ref(1)
 const itemsPerPage = 6
 
-const posts = computed(() => blogStore.filteredPosts)
-
-// 计算总页数
+// B1：服务端分页——总页数由服务端 total 计算（服务端 pageSize 与 itemsPerPage 一致）
 const totalPages = computed(() => {
-  return Math.ceil(posts.value.length / itemsPerPage)
+  return Math.ceil(blogStore.postsTotal / itemsPerPage)
 })
 
-// 获取当前页文章
-const paginatedPosts = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage
-  const end = start + itemsPerPage
-  return posts.value.slice(start, end)
-})
-
-// 处理页码切换
-const handlePageChange = (page) => {
+// 处理页码切换：按页请求服务端数据
+const handlePageChange = async (page) => {
   currentPage.value = page
   window.scrollTo({ top: 0, behavior: 'smooth' })
+  await blogStore.fetchArticlesPage({ page, pageSize: itemsPerPage })
 }
 
-// 筛选条件变化时重置页码
-watch(() => blogStore.filteredPosts.length, () => {
-  currentPage.value = 1
-})
-
 onMounted(async () => {
-  // 清除任何筛选条件
+  // 清除任何筛选条件（D5：保留既有行为）
   blogStore.clearFilters()
-  
-  // 数据由 App.vue 统一加载，此处无需再次请求
-  // 如果需要确保数据加载，App.vue 中的 initializeData 会处理
-  if (blogStore.posts.length === 0 && !blogStore.postsLoading) {
-    await blogStore.initializeData()
-  }
+
+  // B1：首页按页请求（第 1 页，pageSize=6），不再依赖全量列表的客户端 slice
+  await blogStore.fetchArticlesPage({ page: 1, pageSize: itemsPerPage })
   
   // 设置页面元数据
   setPageMetadata({
