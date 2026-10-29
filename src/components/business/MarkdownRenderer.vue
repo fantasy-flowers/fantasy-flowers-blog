@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import 'highlight.js/styles/github.css'; // 选择你喜欢的样式
+import 'highlight.js/styles/github-dark.css'; // 深色代码块主题，与 #2d2d2d 背景匹配
 import { renderMarkdown } from '@/utils/markdownRenderer';
 
 export default {
@@ -287,16 +287,9 @@ export default {
   text-decoration: line-through;
 }
 
-/* 其他文本元素 */
-.markdown-content :deep(span),
-.markdown-content :deep(div) {
-  color: inherit;
-}
-
-/* 确保所有文本都是白色 */
-.markdown-content :deep(*) {
-  color: inherit;
-}
+/* 注意：这里禁止再给 :deep(*) / :deep(span) / :deep(div) 设置 color。
+   这类选择器特异性为 (0,2,0)，高于 highlight.js 的 .hljs-* token 样式 (0,1,0)，
+   会把代码块所有 token 压成同一个颜色。color 本身可继承，无需重复声明。 */
 
 /* 响应式设计 */
 @media (max-width: 768px) {
