@@ -33,14 +33,16 @@
 .fa-calendar{--fa:"\f133"}
 .fa-sliders,.fa-sliders-h{--fa:"\f1de"}
 :host,:root{--fa-family-brands:"Font Awesome 7 Brands";--fa-font-brands:normal 400 1em/1 var(--fa-family-brands)}
-@font-face{font-family:"Font Awesome 7 Brands";font-style:normal;font-weight:400;font-display:block;src:url(/node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2)}
+/* 字体全部为子集产物，由 scripts/subset-fa-fonts.py 按本文件 --fa 码点生成（A4）
+   体积：solid 2.8KB / regular 2.0KB / brands 1.0KB；< 4KB 由 Vite 内联为 base64，零额外请求 */
+@font-face{font-family:"Font Awesome 7 Brands";font-style:normal;font-weight:400;font-display:block;src:url(../assets/fonts/fa-brands-400.subset.woff2) format("woff2")}
 .fa-brands,.fa-classic.fa-brands,.fab{--fa-family:var(--fa-family-brands);--fa-style:400}
 .fa-github{--fa:"\f09b"}
 :host,:root{--fa-font-regular:normal 400 1em/1 var(--fa-family-classic)}
-@font-face{font-family:"Font Awesome 7 Free";font-style:normal;font-weight:400;font-display:block;src:url(/node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2)}
+@font-face{font-family:"Font Awesome 7 Free";font-style:normal;font-weight:400;font-display:block;src:url(../assets/fonts/fa-regular-400.subset.woff2) format("woff2")}
 .fa-regular,.far{--fa-style:400}
 :host,:root{--fa-family-classic:"Font Awesome 7 Free";--fa-font-solid:normal 900 1em/1 var(--fa-family-classic);--fa-style-family-classic:var(--fa-family-classic)}
-@font-face{font-family:"Font Awesome 7 Free";font-style:normal;font-weight:900;font-display:block;src:url(/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2)}
+@font-face{font-family:"Font Awesome 7 Free";font-style:normal;font-weight:900;font-display:block;src:url(../assets/fonts/fa-solid-900.subset.woff2) format("woff2")}
 .fa-solid{--fa-style:900}
 .fas{--fa-style:900}
 .fa-classic,.fas{--fa-family:var(--fa-family-classic)}
